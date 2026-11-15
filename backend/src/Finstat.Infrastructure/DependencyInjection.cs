@@ -1,3 +1,5 @@
+using Finstat.Application;
+using Finstat.Infrastructure.Categories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +16,7 @@ public static class DependencyInjection
                 "Не задана строка подключения ConnectionStrings:Finstat (переменная окружения ConnectionStrings__Finstat).");
 
         services.AddDbContext<FinstatDbContext>(o => o.UseNpgsql(connectionString));
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
         return services;
     }
 }

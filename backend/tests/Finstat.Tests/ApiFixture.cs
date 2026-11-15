@@ -8,7 +8,6 @@ using Testcontainers.PostgreSql;
 
 namespace Finstat.Tests;
 
-/// <summary>API на свежей PostgreSQL в контейнере; один контейнер на класс тестов.</summary>
 public sealed class ApiFixture : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private readonly PostgreSqlContainer _db = new PostgreSqlBuilder("postgres:17-alpine").Build();
@@ -27,7 +26,6 @@ public sealed class ApiFixture : WebApplicationFactory<Program>, IAsyncLifetime
         builder.ConfigureServices(s => s.AddTransient<IStartupFilter, TestEndpoints>());
     }
 
-    // Тестовые эндпоинты для проверки обработки ошибок; в продакшн-коде их нет.
     private sealed class TestEndpoints : IStartupFilter
     {
         public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next) => app =>

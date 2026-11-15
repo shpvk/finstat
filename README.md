@@ -17,6 +17,8 @@ cp .env.example .env     # задайте POSTGRES_PASSWORD
 docker compose up --build
 ```
 
+Пароль не должен содержать `;` и `'`: он подставляется в строку подключения.
+
 API: http://localhost:8080 (`/health`). PostgreSQL хранится в именованном томе `finstat-pgdata`.
 Остановка: `docker compose down`. Флаг `-v` удаляет данные — только осознанно.
 Порты хоста меняются через `API_PORT` и `DB_PORT` в `.env`.

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Finstat.Api;
 
-/// <summary>DomainException -> 400 problem details. Остальные исключения идут в стандартный 500 без деталей.</summary>
 public class DomainExceptionHandler(IProblemDetailsService problemDetails) : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext context, Exception exception, CancellationToken ct)

@@ -12,7 +12,7 @@ public class ApiTests(ApiFixture api) : IClassFixture<ApiFixture>
     [Fact]
     public async Task Startup_applies_migrations()
     {
-        using var client = api.CreateClient(); // запускает хост, а с ним миграции
+        using var client = api.CreateClient();
         await using var scope = api.Services.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<FinstatDbContext>().Database;
 

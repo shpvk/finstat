@@ -24,7 +24,6 @@ if (app.Environment.IsDevelopment())
 
 app.MapHealthChecks("/health");
 
-// Миграции применяются при старте API.
 await using (var scope = app.Services.CreateAsyncScope())
     await scope.ServiceProvider.GetRequiredService<FinstatDbContext>().Database.MigrateAsync();
 

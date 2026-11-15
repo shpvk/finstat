@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Finstat.Domain\Finstat.Domain.csproj" />
+  </ItemGroup>
+</Project>

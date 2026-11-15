@@ -8,6 +8,8 @@ Task: $ARGUMENTS
 
 You are the coordinator in the main session. Call each agent yourself; don't hand this whole command to one subagent.
 
+If the task is a GitHub issue (`#N`), read it with `gh issue view N`; its acceptance criteria are the starting criteria, and its open questions must be settled with the user first.
+
 ## 1. Prepare
 1. Read the relevant sections of `docs/*-decisions.md`, the existing code and project scripts. If a repo exists, check `git status`, record pre-existing user changes and keep them out of scope. Without Git, edit files but don't claim branches or history.
 2. If a repo exists, ensure a work branch from `Development` per `.claude/git-policy.md` (`git-manager` may create it; no commit/push/PR). Never change code on `Development`.

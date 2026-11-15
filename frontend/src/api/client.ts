@@ -1,15 +1,12 @@
-/** Problem Details (RFC 9457) as returned by the ASP.NET Core API. */
 export interface ProblemDetails {
   type?: string
   title?: string
   status?: number
   detail?: string
   instance?: string
-  /** Validation errors: field name to messages. */
   errors?: Record<string, string[]>
 }
 
-/** The only failure the API client reports; `status` is 0 when the response could not be received in full. */
 export class ApiError extends Error {
   readonly status: number
   readonly problem: ProblemDetails | undefined
@@ -24,7 +21,6 @@ export class ApiError extends Error {
 
 interface RequestOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
-  /** Sent as JSON. */
   body?: unknown
   signal?: AbortSignal
 }
@@ -47,7 +43,6 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
     })
     text = await response.text()
   } catch (error) {
-    // A cancelled request is not a failure: let the caller ignore it.
     if (signal?.aborted) throw error
     throw new ApiError('Не вдалося з’єднатися із сервером.', 0)
   }
@@ -55,7 +50,6 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
   if (!response.ok) {
     const isProblem = response.headers.get('Content-Type')?.includes('application/problem+json')
     const problem = isProblem ? parseJson<ProblemDetails>(text) : undefined
-    // `title` is a generic English status label in ASP.NET Core, so only `detail` is shown to the user.
     const message = problem?.detail ?? `Сервер повернув помилку (${response.status}).`
     throw new ApiError(message, response.status, problem)
   }
@@ -68,7 +62,6 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
   return data
 }
 
-/** Returns `undefined` for invalid JSON; valid JSON never parses to `undefined`. */
 function parseJson<T>(text: string): T | undefined {
   try {
     return JSON.parse(text) as T

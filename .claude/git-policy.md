@@ -21,7 +21,7 @@ Several developers work in parallel: each task gets its own branch; never commit
 - Verify with `git log -1 --format=%B` and the commit's file list. If a hook added an unwanted body, don't publish; fix only your own unpublished commit within this task's commit permission. Never rewrite others' commits.
 
 ## PRs
-Short English title. Body: problem, result, checks actually run; no agent reports or assistant attribution. Before publishing review the whole diff against `Development`, including earlier branch commits, for foreign data. After publishing verify base/head and the real PR text. Pass multi-line bodies via a temporary UTF-8 file and `--body-file`, without shell substitution.
+Short English title. Body: problem, result, checks actually run, and `Closes #N` when the task comes from an issue; no agent reports or assistant attribution. Before publishing review the whole diff against `Development`, including earlier branch commits, for foreign data. After publishing verify base/head and the real PR text. Pass multi-line bodies via a temporary UTF-8 file and `--body-file`, without shell substitution.
 
 ## Commands
 - `/git` with no arguments: show state and recommend the next step only.

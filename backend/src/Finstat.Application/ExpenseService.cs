@@ -54,5 +54,5 @@ public class ExpenseService(IExpenseRepository expenses, ICategoryRepository cat
     private static DateOnly RequireDate(DateOnly? date) =>
         date ?? throw new DomainException("Вкажіть дату витрати");
 
-    private static ExpenseDto ToDto(Expense e) => new(e.Id, e.Amount.ToString(), e.CategoryId, e.Date, e.Comment);
+    internal static ExpenseDto ToDto(Expense e) => new(e.Id, e.Amount.ToString(), e.CategoryId, e.Date, e.Comment);
 }

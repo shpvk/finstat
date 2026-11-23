@@ -7,14 +7,21 @@ public record ExpenseRequest(string? Amount, Guid CategoryId, DateOnly? Date, st
 
 public static class ExpenseEndpoints
 {
+    public static bool TryParseMonth(string? month, out DateOnly first) =>
+        DateOnly.TryParseExact(month is null ? null : month + "-01", "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out first)
+        && first is not { Year: 9999, Month: 12 };
+
+    public static IResult InvalidMonth() =>
+        Results.Problem("Вкажіть місяць у форматі РРРР-ММ", statusCode: StatusCodes.Status400BadRequest);
+
     public static void MapExpenseEndpoints(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/api/expenses").WithTags("Expenses");
 
         group.MapGet("/", async (string? month, ExpenseService service, CancellationToken ct) =>
             {
-                if (!DateOnly.TryParseExact(month is null ? null : month + "-01", "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var first) || first is { Year: 9999, Month: 12 })
-                    return Results.Problem("Вкажіть місяць у форматі РРРР-ММ", statusCode: StatusCodes.Status400BadRequest);
+                if (!TryParseMonth(month, out var first))
+                    return InvalidMonth();
                 return Results.Ok(await service.ListAsync(first, ct));
             })
             .WithName("ListExpenses")

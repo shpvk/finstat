@@ -1,5 +1,5 @@
 import { Archive, Pencil } from 'lucide-react'
-import { useState, type FormEvent } from 'react'
+import { useEffect, useId, useRef, useState, type FormEvent } from 'react'
 import {
   archiveCategory,
   createCategory,
@@ -7,7 +7,8 @@ import {
   renameCategory,
   type Category,
 } from '../../api/categories.ts'
-import { errorMessage, useResource } from '../../api/useResource.ts'
+import { errorMessage } from '../../api/client.ts'
+import { useResource } from '../../api/useResource.ts'
 import { Button } from '../../ui/Button.tsx'
 import { PageHeader } from '../../ui/PageHeader.tsx'
 import { TextField } from '../../ui/TextField.tsx'
@@ -27,13 +28,19 @@ function validateName(name: string) {
 type RowAction = 'rename' | 'archive'
 
 export function CategoriesPage() {
-  const { data, error, reload } = useResource('categories', (signal) =>
+  const { data, error, reload, mutate } = useResource('categories', (signal) =>
     listCategories(true, signal),
   )
   const [selected, setSelected] = useState<{ id: string; action: RowAction } | null>(null)
+  const activeHeading = useRef<HTMLHeadingElement>(null)
 
   const active = data?.filter((category) => !category.isArchived) ?? []
   const archived = data?.filter((category) => category.isArchived) ?? []
+
+  function replace(category: Category) {
+    mutate((list) => list.map((item) => (item.id === category.id ? category : item)))
+    reload()
+  }
 
   return (
     <>
@@ -41,7 +48,12 @@ export function CategoriesPage() {
         title="Категорії"
         description="Категорії допомагають бачити, на що саме йдуть гроші"
       />
-      <AddCategoryForm onAdded={reload} />
+      <AddCategoryForm
+        onAdded={(category) => {
+          mutate((list) => [...list, category])
+          reload()
+        }}
+      />
       {error ? (
         <ErrorState message={error} onRetry={reload} />
       ) : !data ? (
@@ -49,11 +61,17 @@ export function CategoriesPage() {
       ) : (
         <>
           <section className={styles.section} aria-labelledby="active-categories">
-            <h2 id="active-categories" className={styles.heading}>
+            <h2
+              id="active-categories"
+              ref={activeHeading}
+              tabIndex={-1}
+              className={styles.heading}
+            >
               Активні <span className={styles.count}>{active.length}</span>
             </h2>
             {active.length === 0 ? (
               <EmptyState
+                level={3}
                 title="Активних категорій немає"
                 description="Додайте категорію, щоб записувати в неї витрати."
               />
@@ -64,10 +82,15 @@ export function CategoriesPage() {
                     key={category.id}
                     category={category}
                     action={selected?.id === category.id ? selected.action : null}
-                    onActionChange={(action) =>
-                      setSelected(action ? { id: category.id, action } : null)
+                    onOpen={(action) => setSelected({ id: category.id, action })}
+                    onClose={() =>
+                      setSelected((current) => (current?.id === category.id ? null : current))
                     }
-                    onChanged={reload}
+                    onRenamed={replace}
+                    onArchived={(archivedCategory) => {
+                      replace(archivedCategory)
+                      activeHeading.current?.focus()
+                    }}
                   />
                 ))}
               </ul>
@@ -98,7 +121,7 @@ export function CategoriesPage() {
   )
 }
 
-function AddCategoryForm({ onAdded }: { onAdded: () => void }) {
+function AddCategoryForm({ onAdded }: { onAdded: (category: Category) => void }) {
   const toast = useToast()
   const [name, setName] = useState('')
   const [error, setError] = useState<string>()
@@ -117,7 +140,7 @@ function AddCategoryForm({ onAdded }: { onAdded: () => void }) {
       setName('')
       setError(undefined)
       toast(`Категорію «${category.name}» додано`)
-      onAdded()
+      onAdded(category)
     } catch (failure) {
       setError(errorMessage(failure))
     } finally {
@@ -133,6 +156,7 @@ function AddCategoryForm({ onAdded }: { onAdded: () => void }) {
           placeholder="Наприклад, Транспорт"
           value={name}
           maxLength={maxNameLength}
+          readOnly={saving}
           error={error}
           onChange={(event) => {
             setName(event.target.value)
@@ -152,35 +176,75 @@ function AddCategoryForm({ onAdded }: { onAdded: () => void }) {
 interface ActiveCategoryRowProps {
   category: Category
   action: RowAction | null
-  onActionChange: (action: RowAction | null) => void
-  onChanged: () => void
+  onOpen: (action: RowAction) => void
+  onClose: () => void
+  onRenamed: (category: Category) => void
+  onArchived: (category: Category) => void
 }
 
-function ActiveCategoryRow({ category, action, onActionChange, onChanged }: ActiveCategoryRowProps) {
-  const close = () => onActionChange(null)
+function ActiveCategoryRow({
+  category,
+  action,
+  onOpen,
+  onClose,
+  onRenamed,
+  onArchived,
+}: ActiveCategoryRowProps) {
+  const renameButton = useRef<HTMLButtonElement>(null)
+  const archiveButton = useRef<HTMLButtonElement>(null)
+  const opened = useRef<RowAction | null>(null)
+
+  useEffect(() => {
+    if (action) {
+      opened.current = action
+      return
+    }
+    if (opened.current) {
+      const opener = opened.current === 'rename' ? renameButton : archiveButton
+      opener.current?.focus()
+      opened.current = null
+    }
+  }, [action])
 
   return (
     <li className={styles.row}>
       {action === 'rename' ? (
-        <RenameForm category={category} onDone={close} onChanged={onChanged} />
+        <RenameForm
+          category={category}
+          onCancel={onClose}
+          onSaved={(renamed) => {
+            onClose()
+            onRenamed(renamed)
+          }}
+        />
       ) : action === 'archive' ? (
-        <ArchiveConfirm category={category} onDone={close} onChanged={onChanged} />
+        <ArchiveConfirm
+          category={category}
+          onCancel={onClose}
+          onSaved={() => {
+            opened.current = null
+            onClose()
+            onArchived({ ...category, isArchived: true })
+          }}
+        />
       ) : (
         <>
           <span className={styles.name}>{category.name}</span>
           <span className={styles.actions}>
             <Button
+              ref={renameButton}
               variant="ghost"
               aria-label={`Перейменувати «${category.name}»`}
-              onClick={() => onActionChange('rename')}
+              onClick={() => onOpen('rename')}
             >
               <Pencil size={16} aria-hidden="true" />
               Перейменувати
             </Button>
             <Button
+              ref={archiveButton}
               variant="ghost"
               aria-label={`Архівувати «${category.name}»`}
-              onClick={() => onActionChange('archive')}
+              onClick={() => onOpen('archive')}
             >
               <Archive size={16} aria-hidden="true" />
               Архівувати
@@ -192,13 +256,13 @@ function ActiveCategoryRow({ category, action, onActionChange, onChanged }: Acti
   )
 }
 
-interface RowFormProps {
+interface RenameFormProps {
   category: Category
-  onDone: () => void
-  onChanged: () => void
+  onCancel: () => void
+  onSaved: (category: Category) => void
 }
 
-function RenameForm({ category, onDone, onChanged }: RowFormProps) {
+function RenameForm({ category, onCancel, onSaved }: RenameFormProps) {
   const toast = useToast()
   const [name, setName] = useState(category.name)
   const [error, setError] = useState<string>()
@@ -212,15 +276,14 @@ function RenameForm({ category, onDone, onChanged }: RowFormProps) {
       return
     }
     if (name.trim() === category.name) {
-      onDone()
+      onCancel()
       return
     }
     setSaving(true)
     try {
       const renamed = await renameCategory(category.id, name.trim())
       toast(`Категорію перейменовано на «${renamed.name}»`)
-      onDone()
-      onChanged()
+      onSaved(renamed)
     } catch (failure) {
       setError(errorMessage(failure))
       setSaving(false)
@@ -232,7 +295,7 @@ function RenameForm({ category, onDone, onChanged }: RowFormProps) {
       className={styles.inlineForm}
       onSubmit={submit}
       onKeyDown={(event) => {
-        if (event.key === 'Escape') onDone()
+        if (event.key === 'Escape' && !saving) onCancel()
       }}
       noValidate
     >
@@ -242,6 +305,7 @@ function RenameForm({ category, onDone, onChanged }: RowFormProps) {
           hideLabel
           value={name}
           maxLength={maxNameLength}
+          readOnly={saving}
           error={error}
           autoFocus
           onChange={(event) => {
@@ -254,24 +318,32 @@ function RenameForm({ category, onDone, onChanged }: RowFormProps) {
         <Button type="submit" variant="primary" loading={saving}>
           Зберегти
         </Button>
-        <Button onClick={onDone}>Скасувати</Button>
+        <Button onClick={onCancel} disabled={saving}>
+          Скасувати
+        </Button>
       </span>
     </form>
   )
 }
 
-function ArchiveConfirm({ category, onDone, onChanged }: RowFormProps) {
+interface ArchiveConfirmProps {
+  category: Category
+  onCancel: () => void
+  onSaved: () => void
+}
+
+function ArchiveConfirm({ category, onCancel, onSaved }: ArchiveConfirmProps) {
   const toast = useToast()
   const [error, setError] = useState<string>()
   const [saving, setSaving] = useState(false)
+  const noteId = useId()
 
   async function confirm() {
     setSaving(true)
     try {
       await archiveCategory(category.id)
       toast(`Категорію «${category.name}» перенесено в архів`)
-      onDone()
-      onChanged()
+      onSaved()
     } catch (failure) {
       setError(errorMessage(failure))
       setSaving(false)
@@ -283,21 +355,29 @@ function ArchiveConfirm({ category, onDone, onChanged }: RowFormProps) {
       className={styles.inlineForm}
       role="group"
       aria-label={`Архівування «${category.name}»`}
+      aria-describedby={noteId}
       onKeyDown={(event) => {
-        if (event.key === 'Escape') onDone()
+        if (event.key === 'Escape' && !saving) onCancel()
       }}
     >
       <div className={styles.grow}>
         <p className={styles.confirmTitle}>Архівувати «{category.name}»?</p>
-        <p className={error ? styles.confirmError : styles.note} role={error ? 'alert' : undefined}>
-          {error ?? 'Нові витрати в ній додати не вийде. Відновлення з архіву не передбачено.'}
+        <p id={noteId} className={styles.note}>
+          Нові витрати в ній додати не вийде. Відновлення з архіву не передбачено.
         </p>
+        {error && (
+          <p className={styles.confirmError} role="alert">
+            {error}
+          </p>
+        )}
       </div>
       <span className={styles.actions}>
-        <Button variant="danger" loading={saving} onClick={confirm} autoFocus>
+        <Button variant="danger" loading={saving} onClick={confirm}>
           Архівувати
         </Button>
-        <Button onClick={onDone}>Скасувати</Button>
+        <Button onClick={onCancel} disabled={saving} autoFocus>
+          Скасувати
+        </Button>
       </span>
     </div>
   )

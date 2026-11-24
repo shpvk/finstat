@@ -153,4 +153,61 @@ describe('CategoriesPage', () => {
 
     expect(await screen.findByText('Їжа')).toBeInTheDocument()
   })
+
+  it('explains that there are no active categories', async () => {
+    categoriesApi([{ id: '2', name: 'Таксі', isArchived: true }])
+    renderPage()
+
+    expect(await screen.findByText('Активних категорій немає')).toBeInTheDocument()
+    expect(screen.getByRole('region', { name: /Архів/ })).toBeInTheDocument()
+  })
+
+  it('keeps the rename form open with the server error', async () => {
+    fakeApi({
+      'GET /api/categories': () => ({ body: [{ id: '1', name: 'Їжа', isArchived: false }] }),
+      'PUT /api/categories/1': () => problem('Категорія з такою назвою вже існує'),
+    })
+    renderPage()
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Перейменувати «Їжа»' }))
+    fireEvent.change(screen.getByLabelText('Нова назва для «Їжа»'), {
+      target: { value: 'Комунальні послуги' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Зберегти' }))
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('Категорія з такою назвою вже існує')
+    expect(screen.getByLabelText('Нова назва для «Їжа»')).toHaveValue('Комунальні послуги')
+  })
+
+  it('cancels renaming with Escape and returns focus to the row', async () => {
+    const fetchMock = fakeApi({
+      'GET /api/categories': () => ({ body: [{ id: '1', name: 'Їжа', isArchived: false }] }),
+    })
+    renderPage()
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Перейменувати «Їжа»' }))
+    const input = screen.getByLabelText('Нова назва для «Їжа»')
+    fireEvent.change(input, { target: { value: 'Продукти' } })
+    fireEvent.keyDown(input, { key: 'Escape' })
+
+    expect(screen.queryByLabelText('Нова назва для «Їжа»')).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Перейменувати «Їжа»' })).toHaveFocus()
+    expect(fetchMock.mock.calls.some(([, init]) => init?.method === 'PUT')).toBe(false)
+  })
+
+  it('shows why archiving failed and keeps the category active', async () => {
+    fakeApi({
+      'GET /api/categories': () => ({ body: [{ id: '1', name: 'Їжа', isArchived: false }] }),
+      'POST /api/categories/1/archive': () => problem('Категорію не знайдено', 404),
+    })
+    renderPage()
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Архівувати «Їжа»' }))
+    const confirm = screen.getByRole('group', { name: 'Архівування «Їжа»' })
+    expect(within(confirm).getByRole('button', { name: 'Скасувати' })).toHaveFocus()
+    fireEvent.click(within(confirm).getByRole('button', { name: 'Архівувати' }))
+
+    expect(await within(confirm).findByRole('alert')).toHaveTextContent('Категорію не знайдено')
+    expect(screen.queryByRole('region', { name: /Архів/ })).not.toBeInTheDocument()
+  })
 })

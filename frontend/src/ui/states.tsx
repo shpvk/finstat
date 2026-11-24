@@ -20,13 +20,16 @@ interface EmptyStateProps {
   title: string
   description?: string
   action?: ReactNode
+  level?: 2 | 3
 }
 
-export function EmptyState({ title, description, action }: EmptyStateProps) {
+export function EmptyState({ title, description, action, level = 2 }: EmptyStateProps) {
+  const Heading = level === 3 ? 'h3' : 'h2'
+
   return (
     <div className={styles.panel}>
       <Inbox className={styles.icon} size={24} strokeWidth={1.75} aria-hidden="true" />
-      <h2 className={styles.title}>{title}</h2>
+      <Heading className={styles.title}>{title}</Heading>
       {description && <p className={styles.description}>{description}</p>}
       {action && <div className={styles.action}>{action}</div>}
     </div>

@@ -62,6 +62,10 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
   return data
 }
 
+export function errorMessage(error: unknown) {
+  return error instanceof ApiError ? error.message : 'Щось пішло не так. Спробуйте ще раз.'
+}
+
 function parseJson<T>(text: string): T | undefined {
   try {
     return JSON.parse(text) as T

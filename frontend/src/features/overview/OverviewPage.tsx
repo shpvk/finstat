@@ -9,6 +9,7 @@ import { ButtonLink } from '../../ui/Button.tsx'
 import { MonthSwitcher } from '../../ui/MonthSwitcher.tsx'
 import { PageHeader } from '../../ui/PageHeader.tsx'
 import { EmptyState, ErrorState, LoadingState } from '../../ui/states.tsx'
+import { CategoryBreakdown } from './CategoryBreakdown.tsx'
 import styles from './OverviewPage.module.css'
 
 const plural = new Intl.PluralRules('uk-UA')
@@ -42,7 +43,13 @@ export function OverviewPage() {
           }
         />
       ) : (
-        <Summary statistics={statistics.data} monthName={monthName} />
+        <>
+          <Summary statistics={statistics.data} monthName={monthName} />
+          <CategoryBreakdown
+            categories={statistics.data.categories}
+            total={statistics.data.total}
+          />
+        </>
       )}
     </>
   )

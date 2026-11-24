@@ -1,0 +1,109 @@
+.summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+  gap: var(--space-6);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+}
+
+.cardLabel {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.total {
+  margin-top: var(--space-2);
+  font-size: var(--font-size-display);
+  font-weight: var(--font-weight-semibold);
+  font-variant-numeric: var(--numeric-figures);
+  letter-spacing: -0.02em;
+  line-height: var(--line-height-tight);
+}
+
+.meta {
+  margin-top: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.top {
+  margin-top: auto;
+  padding-top: var(--space-6);
+  font-size: var(--font-size-sm);
+}
+
+.top strong {
+  font-weight: var(--font-weight-semibold);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+.cardTitle {
+  font-size: var(--font-size-md);
+}
+
+.more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--color-accent-text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+}
+
+.more:hover {
+  text-decoration: underline;
+}
+
+.recent {
+  padding: 0;
+  list-style: none;
+}
+
+.operation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-block: var(--space-3);
+}
+
+.operation + .operation {
+  border-top: 1px solid var(--color-border);
+}
+
+.operationText {
+  display: grid;
+  min-width: 0;
+}
+
+.operationName {
+  font-weight: var(--font-weight-medium);
+}
+
+.operationMeta {
+  overflow: hidden;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.operationAmount {
+  font-weight: var(--font-weight-medium);
+  font-variant-numeric: var(--numeric-figures);
+  white-space: nowrap;
+}

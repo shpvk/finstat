@@ -1,3 +1,4 @@
+using System.Globalization;
 using Finstat.Application;
 
 namespace Finstat.Tests;
@@ -12,5 +13,7 @@ public class StatisticsShareTests
     [InlineData("1", "1", "100.0")]
     [InlineData("0", "0", "0.0")]
     public void Share_is_rounded_to_one_decimal_away_from_zero(string part, string total, string expected) =>
-        Assert.Equal(expected, StatisticsService.Share(decimal.Parse(part), decimal.Parse(total)));
+        Assert.Equal(expected, StatisticsService.Share(
+            decimal.Parse(part, CultureInfo.InvariantCulture),
+            decimal.Parse(total, CultureInfo.InvariantCulture)));
 }

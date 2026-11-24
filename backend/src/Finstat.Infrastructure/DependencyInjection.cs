@@ -1,7 +1,7 @@
-using Finstat.Application;
-using Finstat.Infrastructure.Categories;
-using Finstat.Infrastructure.Expenses;
-using Finstat.Infrastructure.Statistics;
+using Finstat.Application.Queries;
+using Finstat.Application.Repositories;
+using Finstat.Infrastructure.Queries;
+using Finstat.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

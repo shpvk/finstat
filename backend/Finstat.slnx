@@ -5,7 +5,4 @@
     <Project Path="src/Finstat.Domain/Finstat.Domain.csproj" />
     <Project Path="src/Finstat.Infrastructure/Finstat.Infrastructure.csproj" />
   </Folder>
-  <Folder Name="/tests/">
-    <Project Path="tests/Finstat.Tests/Finstat.Tests.csproj" />
-  </Folder>
 </Solution>

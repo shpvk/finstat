@@ -45,7 +45,7 @@ docker compose up --build
 ```mermaid
 flowchart LR
   browser[Браузер] --> web["web: nginx<br/>статика React + прокси /api"]
-  web --> api["api: ASP.NET Core<br/>Minimal API"]
+  web --> api["api: ASP.NET Core<br/>Web API"]
   api --> db[("db: PostgreSQL<br/>том finstat-pgdata")]
 ```
 
@@ -62,10 +62,10 @@ flowchart TB
   Infrastructure --> Domain
 ```
 
-- **Domain** — модель и правила без внешних зависимостей. Агрегаты `Category` и `Expense`; расход ссылается на категорию по идентификатору. Объект-значение `Money` хранит сумму в `decimal`: только положительная, не больше двух знаков после запятой, лишняя точность отвергается, а не округляется. Состояние меняется только методами (`Rename`, `Archive`, `Change`), публичных setters нет.
+- **Domain** — модель и правила без внешних зависимостей. Агрегаты `CategoryEntity` и `ExpenseEntity`; расход ссылается на категорию по идентификатору. Сумма — `decimal`, проверка в `ExpenseEntity`: только положительная, не больше двух знаков после запятой, лишняя точность отвергается, а не округляется. Состояние меняется только методами (`Rename`, `Archive`, `Change`), публичных setters нет.
 - **Application** — сценарии: `CategoryService`, `ExpenseService`, `StatisticsService`. Здесь проверяется, например, уникальность названия категории и то, что новый расход не попадает в архивную категорию. Интерфейсы хранения (`ICategoryRepository`, `IExpenseRepository`, `IStatisticsQuery`) объявлены здесь же.
 - **Infrastructure** — EF Core (Npgsql), конфигурация маппинга, миграции и реализации интерфейсов. Статистика месяца считается агрегацией в SQL, без загрузки всех расходов.
-- **Api** — HTTP-эндпоинты под `/api`, явные DTO, ошибки в формате Problem Details. Обработчики вызывают сценарии и не содержат бизнес-правил.
+- **Api** — контроллеры под `/api`, явные DTO, ошибки в формате Problem Details. Контроллеры вызывают сценарии и не содержат бизнес-правил.
 
 ### Фронтенд
 
@@ -73,11 +73,10 @@ React + TypeScript (strict) + Vite, код разложен по раздела�
 
 ## Структура backend (`backend/`)
 
-- `src/Finstat.Domain` — сущности и инварианты, без внешних зависимостей.
-- `src/Finstat.Application` — сценарии использования (зависит от Domain).
-- `src/Finstat.Infrastructure` — EF Core (Npgsql), `FinstatDbContext`, миграции.
-- `src/Finstat.Api` — Minimal API, Problem Details, `/health`.
-- `tests/Finstat.Tests` — xUnit; интеграционные тесты на реальной PostgreSQL (Testcontainers).
+- `src/Finstat.Domain` — `Entities/`, `Results/`: сущности и инварианты, без внешних зависимостей.
+- `src/Finstat.Application` — `Services/`, `DTOs/`, `Repositories/`, `Queries/`: сценарии использования (зависит от Domain).
+- `src/Finstat.Infrastructure` — `Repositories/`, `Queries/`, `Configurations/`, EF Core (Npgsql), `FinstatDbContext`, миграции.
+- `src/Finstat.Api` — `Controllers/`, `Helpers/`: контроллеры, Problem Details, `/health`.
 
 ## Локальная разработка
 
@@ -109,11 +108,10 @@ Dev-сервер: http://localhost:5173, запросы `/api` он прокси
 
 ## Проверки
 
-Бэкенд, из `backend/` (для тестов нужен запущенный Docker):
+Бэкенд, из `backend/`:
 
 ```
 dotnet build
-dotnet test
 ```
 
 Фронтенд, из `frontend/`:

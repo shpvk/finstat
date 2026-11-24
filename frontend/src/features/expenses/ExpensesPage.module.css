@@ -1,0 +1,137 @@
+.panel {
+  margin-bottom: var(--space-10);
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+}
+
+.panelTitle {
+  margin-bottom: var(--space-4);
+  font-size: var(--font-size-lg);
+}
+
+.note {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.note a {
+  color: var(--color-accent-text);
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+}
+
+.count {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: var(--numeric-figures);
+}
+
+.table {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: var(--radius-panel);
+  font-size: var(--font-size-sm);
+  transition: opacity var(--duration-base) var(--ease-out);
+}
+
+.table[aria-busy='true'] {
+  opacity: 0.6;
+}
+
+.table th {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-medium);
+  text-align: left;
+}
+
+.table td {
+  padding: var(--space-2) var(--space-4);
+  vertical-align: middle;
+}
+
+.table tbody tr + tr td {
+  border-top: 1px solid var(--color-border);
+}
+
+.date {
+  white-space: nowrap;
+  font-variant-numeric: var(--numeric-figures);
+}
+
+.weekday {
+  margin-left: var(--space-2);
+  color: var(--color-text-muted);
+}
+
+.comment {
+  max-width: 16rem;
+  color: var(--color-text-muted);
+  overflow-wrap: anywhere;
+}
+
+.table .amountHead {
+  text-align: right;
+}
+
+.amount {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  font-variant-numeric: var(--numeric-figures);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.actions {
+  width: 1%;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.actions > * + * {
+  margin-left: var(--space-1);
+}
+
+.badge {
+  margin-left: var(--space-2);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-control);
+  background: var(--color-surface-subtle);
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-medium);
+}
+
+.expanded td {
+  padding: var(--space-4);
+  background: var(--color-surface-subtle);
+}
+
+.confirm {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.grow {
+  flex: 1;
+  min-width: 0;
+}
+
+.confirmTitle {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+}
+
+.error {
+  color: var(--color-danger-text);
+  font-size: var(--font-size-sm);
+}

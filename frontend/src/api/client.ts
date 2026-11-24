@@ -50,7 +50,12 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
   if (!response.ok) {
     const isProblem = response.headers.get('Content-Type')?.includes('application/problem+json')
     const problem = isProblem ? parseJson<ProblemDetails>(text) : undefined
-    const message = problem?.detail ?? `Сервер повернув помилку (${response.status}).`
+    const unavailable = [502, 503, 504].includes(response.status)
+    const message =
+      problem?.detail ??
+      (unavailable
+        ? 'Сервер зараз недоступний. Перевірте, що застосунок запущено, і спробуйте ще раз.'
+        : `Сервер повернув помилку (${response.status}).`)
     throw new ApiError(message, response.status, problem)
   }
 
@@ -60,6 +65,10 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
     throw new ApiError('Сервер повернув некоректну відповідь.', response.status)
   }
   return data
+}
+
+export function errorMessage(error: unknown) {
+  return error instanceof ApiError ? error.message : 'Щось пішло не так. Спробуйте ще раз.'
 }
 
 function parseJson<T>(text: string): T | undefined {

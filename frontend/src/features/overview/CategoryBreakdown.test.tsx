@@ -28,9 +28,9 @@ describe('CategoryBreakdown', () => {
       'Комунальні послуги',
       'Транспорт',
     ])
-    expect(rows[0].textContent).toMatch(/1\s623,15.*56,2\s%/)
+    expect(rows[0].textContent).toMatch(/1\s623,15.*56,2%/)
     expect(screen.getByRole('img')).toHaveAccessibleName(
-      /^Частки категорій: Їжа 56,2\s%, Розваги 18,0\s%, Комунальні послуги 13,2\s%, Транспорт 12,7\s%$/,
+      /^Частки категорій: Їжа 56,2%, Розваги 18,0%, Комунальні послуги 13,2%, Транспорт 12,7%$/,
     )
   })
 
@@ -46,7 +46,7 @@ describe('CategoryBreakdown', () => {
     ]
     render(<CategoryBreakdown total="1000.00" categories={categories} />)
 
-    expect(screen.getByRole('img')).toHaveAccessibleName(/E 8,0\s%, Інші 7,0\s%$/)
+    expect(screen.getByRole('img')).toHaveAccessibleName(/E 8,0%, Інші 7,0%$/)
     expect(within(screen.getByRole('table')).getAllByRole('row')).toHaveLength(8)
   })
 
@@ -61,7 +61,49 @@ describe('CategoryBreakdown', () => {
     expect(container.textContent).toMatch(/900,00.*усього/)
     fireEvent.pointerEnter(screen.getByRole('row', { name: /Таксі/ }))
 
-    expect(container.textContent).toMatch(/33,3\s%Таксі/)
+    expect(container.textContent).toMatch(/33,3%Таксі/)
     expect(container.querySelectorAll('circle[data-dimmed]')).toHaveLength(1)
+
+    fireEvent.pointerLeave(screen.getByRole('row', { name: /Таксі/ }))
+    expect(container.textContent).toMatch(/900,00.*усього/)
+    expect(container.querySelectorAll('circle[data-dimmed]')).toHaveLength(0)
+  })
+
+  it('gives each of six categories its own segment and color', () => {
+    const names = ['A', 'B', 'C', 'D', 'E', 'F']
+    const { container } = render(
+      <CategoryBreakdown
+        total="600.00"
+        categories={names.map((name, index) => category(name, `${600 - index * 50}.00`, `${20 - index}.0`))}
+      />,
+    )
+
+    expect(screen.getByRole('img')).not.toHaveAccessibleName(/Інші/)
+    const circles = container.querySelectorAll('circle')
+    expect(circles).toHaveLength(6)
+    expect(circles[5]).toHaveStyle({ stroke: 'var(--chart-6)' })
+  })
+
+  it('draws a single category as a full ring', () => {
+    const { container } = render(
+      <CategoryBreakdown total="75.00" categories={[category('Таксі', '75.00', '100.0')]} />,
+    )
+
+    const circles = container.querySelectorAll('circle')
+    expect(circles).toHaveLength(1)
+    expect(circles[0]).toHaveAttribute('stroke-dasharray', '1000 0')
+  })
+
+  it('highlights every folded row together with the "Інші" segment', () => {
+    const categories = ['A', 'B', 'C', 'D', 'E', 'F', 'G'].map((name, index) =>
+      category(name, `${700 - index * 50}.00`, `${20 - index}.0`),
+    )
+    const { container } = render(<CategoryBreakdown total="3500.00" categories={categories} />)
+
+    fireEvent.pointerEnter(screen.getByRole('row', { name: /^G/ }))
+
+    expect(container.textContent).toMatch(/Інші/)
+    expect(container.querySelectorAll('tr[data-active]')).toHaveLength(2)
+    expect(container.querySelectorAll('circle[data-dimmed]')).toHaveLength(5)
   })
 })

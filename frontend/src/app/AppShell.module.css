@@ -108,7 +108,7 @@
   position: fixed;
   top: var(--space-2);
   left: var(--space-2);
-  z-index: var(--layer-toast);
+  z-index: var(--layer-skip-link);
   padding: var(--space-2) var(--space-4);
   border-radius: var(--radius-control);
   background: var(--color-accent);

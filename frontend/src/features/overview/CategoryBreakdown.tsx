@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import type { CategoryStatistics } from '../../api/statistics.ts'
-import { compareAmounts, formatMoney, formatShare } from '../../shared/money.ts'
+import { byTotalDesc, type CategoryStatistics } from '../../api/statistics.ts'
+import { formatMoney, formatShare } from '../../shared/money.ts'
 import styles from './CategoryBreakdown.module.css'
 
 const maxSegments = 6
 const ringLength = 1000
 const gapLength = 4
+const minVisibleLength = 3
 
 interface Segment {
   key: string
@@ -53,8 +54,8 @@ interface CategoryBreakdownProps {
 
 export function CategoryBreakdown({ categories, total }: CategoryBreakdownProps) {
   const [active, setActive] = useState<string | null>(null)
-  const sorted = [...categories].sort((a, b) => compareAmounts(b.total, a.total))
-  const segments = buildSegments(sorted)
+  const sorted = [...categories].sort(byTotalDesc)
+  const segments = buildSegments(sorted).filter((segment) => segment.tenths > 0)
   const segmentOf = new Map(
     segments.flatMap((segment) => segment.categoryIds.map((id) => [id, segment] as const)),
   )
@@ -64,7 +65,8 @@ export function CategoryBreakdown({ categories, total }: CategoryBreakdownProps)
   const lengths = segments.map((segment) => segment.tenths * scale)
   const arcs = segments.map((segment, index) => {
     const start = lengths.slice(0, index).reduce((sum, length) => sum + length, 0)
-    const visible = segments.length > 1 ? Math.max(lengths[index] - gapLength, 1) : lengths[index]
+    const visible =
+      segments.length > 1 ? Math.max(lengths[index] - gapLength, minVisibleLength) : lengths[index]
     return { segment, dash: `${visible} ${ringLength - visible}`, offset: -start }
   })
 
@@ -116,7 +118,7 @@ export function CategoryBreakdown({ categories, total }: CategoryBreakdownProps)
             )}
           </div>
         </div>
-        <table className={styles.table}>
+        <table className={styles.table} aria-labelledby="by-category">
           <thead>
             <tr>
               <th scope="col">Категорія</th>
@@ -141,7 +143,9 @@ export function CategoryBreakdown({ categories, total }: CategoryBreakdownProps)
                   <th scope="row" className={styles.name}>
                     <span
                       className={styles.swatch}
-                      style={{ background: `var(--chart-${(segment?.colorIndex ?? 0) + 1})` }}
+                      style={
+                        segment ? { background: `var(--chart-${segment.colorIndex + 1})` } : undefined
+                      }
                       aria-hidden="true"
                     />
                     {category.name}

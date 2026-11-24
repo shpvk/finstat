@@ -27,5 +27,13 @@ services:
       db:
         condition: service_healthy
 
+  web:
+    build: ./frontend
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${WEB_PORT:-3000}:80"
+    depends_on:
+      - api
+
 volumes:
   finstat-pgdata:

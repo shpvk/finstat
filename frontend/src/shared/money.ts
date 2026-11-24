@@ -10,20 +10,23 @@ export function formatMoney(amount: string) {
 }
 
 const shareFormat = new Intl.NumberFormat('uk-UA', {
+  style: 'unit',
+  unit: 'percent',
   minimumFractionDigits: 1,
   maximumFractionDigits: 1,
 })
 
 export function formatShare(share: string) {
-  return `${shareFormat.format(share as Intl.StringNumericLiteral)} %`
+  return shareFormat.format(share as Intl.StringNumericLiteral)
 }
 
 export function compareAmounts(a: string, b: string) {
   const [aInteger, aFraction = ''] = a.split('.')
   const [bInteger, bFraction = ''] = b.split('.')
   if (aInteger.length !== bInteger.length) return aInteger.length - bInteger.length
-  const left = `${aInteger}.${aFraction.padEnd(2, '0')}`
-  const right = `${bInteger}.${bFraction.padEnd(2, '0')}`
+  const width = Math.max(aFraction.length, bFraction.length)
+  const left = `${aInteger}.${aFraction.padEnd(width, '0')}`
+  const right = `${bInteger}.${bFraction.padEnd(width, '0')}`
   return left < right ? -1 : left > right ? 1 : 0
 }
 

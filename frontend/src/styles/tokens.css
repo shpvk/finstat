@@ -1,0 +1,55 @@
+:root {
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f4f7fa;
+  --color-surface-hover: #ebeff4;
+  --color-surface-active: #e2e7ed;
+  --color-border: #dfe3e8;
+  --color-border-strong: #818a95;
+  --color-text: #151b24;
+  --color-text-muted: #545b66;
+  --color-text-disabled: #81878f;
+  --color-accent: #1f5ed9;
+  --color-accent-hover: #134ac5;
+  --color-accent-active: #103baf;
+  --color-accent-subtle: #e7f1ff;
+  --color-accent-text: #1245b9;
+  --color-on-accent: #ffffff;
+  --color-danger: #c51e21;
+  --color-danger-hover: #ac0311;
+  --color-danger-active: #94020d;
+  --color-danger-text: #b00c15;
+  --color-danger-border: #d33b36;
+
+  --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --numeric-figures: tabular-nums;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  --radius-control: 6px;
+  --radius-panel: 10px;
+
+  --control-height: 2.5rem;
+  --sidebar-width: 15.5rem;
+  --content-width: 60rem;
+
+  --shadow-control: 0 1px 2px rgb(21 27 36 / 0.08);
+
+  --duration-fast: 150ms;
+  --duration-base: 180ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}

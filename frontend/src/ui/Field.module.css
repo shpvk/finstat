@@ -1,0 +1,122 @@
+.field {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+}
+
+.label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.control {
+  width: 100%;
+  height: var(--control-height);
+  padding-inline: var(--space-3);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-control);
+  font-size: var(--font-size-md);
+  font-variant-numeric: var(--numeric-figures);
+  transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.control::placeholder {
+  color: var(--color-text-muted);
+  opacity: 1;
+}
+
+.control:enabled:hover {
+  border-color: var(--color-text-muted);
+}
+
+.control:enabled:focus-visible {
+  border-color: var(--color-accent);
+}
+
+.control:enabled[aria-invalid='true'] {
+  border-color: var(--color-danger-border);
+}
+
+.control:disabled {
+  border-color: var(--color-border);
+  background: var(--color-surface-subtle);
+  box-shadow: none;
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+}
+
+.controlWrap {
+  position: relative;
+  display: block;
+}
+
+.select {
+  padding-inline-end: var(--space-8);
+  appearance: none;
+  cursor: pointer;
+}
+
+.adornment {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: var(--space-3);
+  margin-block: auto;
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.control:disabled + .adornment {
+  color: var(--color-text-disabled);
+}
+
+.date {
+  position: relative;
+}
+
+.dateIcon {
+  display: none;
+}
+
+@supports selector(::-webkit-calendar-picker-indicator) {
+  .date {
+    padding-inline-end: var(--space-8);
+  }
+
+  .date:disabled::-webkit-calendar-picker-indicator {
+    cursor: not-allowed;
+  }
+
+  .dateIcon {
+    display: block;
+  }
+
+  .date::-webkit-calendar-picker-indicator {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    width: var(--control-height);
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+}
+
+.hint,
+.error {
+  font-size: var(--font-size-sm);
+}
+
+.hint {
+  color: var(--color-text-muted);
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--color-danger-text);
+}

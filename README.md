@@ -4,11 +4,10 @@
 
 ## Структура backend (`backend/`)
 
-- `src/Finstat.Domain` — сущности и инварианты, без внешних зависимостей.
-- `src/Finstat.Application` — сценарии использования (зависит от Domain).
-- `src/Finstat.Infrastructure` — EF Core (Npgsql), `FinstatDbContext`, миграции.
-- `src/Finstat.Api` — Minimal API, Problem Details, `/health`.
-- `tests/Finstat.Tests` — xUnit; интеграционные тесты на реальной PostgreSQL (Testcontainers).
+- `src/Finstat.Domain` — `Entities/`, `Results/`: сущности и инварианты, без внешних зависимостей.
+- `src/Finstat.Application` — `Services/`, `DTOs/`, `Repositories/`, `Queries/`: сценарии использования (зависит от Domain).
+- `src/Finstat.Infrastructure` — `Repositories/`, `Queries/`, `Configurations/`, EF Core (Npgsql), `FinstatDbContext`, миграции.
+- `src/Finstat.Api` — `Controllers/`, `Helpers/`: контроллеры, Problem Details, `/health`.
 
 ## Запуск через Docker Compose
 
@@ -41,11 +40,10 @@ OpenAPI — `/openapi/v1.json`, Scalar UI — `/scalar`. В Docker-образе 
 
 ## Проверки
 
-Из `backend/` (для тестов нужен запущенный Docker):
+Из `backend/`:
 
 ```
 dotnet build
-dotnet test
 ```
 
 ## Миграции

@@ -1,5 +1,4 @@
-using Finstat.Api;
-using Finstat.Application;
+using Finstat.Application.Services;
 using Finstat.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
@@ -10,8 +9,8 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<ExpenseService>();
 builder.Services.AddScoped<StatisticsService>();
+builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
-builder.Services.AddExceptionHandler<DomainExceptionHandler>();
 builder.Services.AddOpenApi();
 builder.Services.AddHealthChecks().AddDbContextCheck<FinstatDbContext>();
 
@@ -27,13 +26,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapHealthChecks("/health");
-app.MapCategoryEndpoints();
-app.MapExpenseEndpoints();
-app.MapStatisticsEndpoints();
+app.MapControllers();
 
 await using (var scope = app.Services.CreateAsyncScope())
     await scope.ServiceProvider.GetRequiredService<FinstatDbContext>().Database.MigrateAsync();
 
 app.Run();
-
-public partial class Program;

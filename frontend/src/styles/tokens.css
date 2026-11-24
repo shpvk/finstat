@@ -20,12 +20,20 @@
   --color-danger-text: #b00c15;
   --color-danger-border: #d33b36;
 
+  --chart-1: #2a78d6;
+  --chart-2: #eb6834;
+  --chart-3: #1baf7a;
+  --chart-4: #eda100;
+  --chart-5: #e87ba4;
+  --chart-6: #008300;
+
   --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-size-sm: 0.875rem;
   --font-size-md: 1rem;
   --font-size-lg: 1.25rem;
   --font-size-xl: 1.5rem;
   --font-size-display: 2.25rem;
+  --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --line-height-tight: 1.25;
@@ -43,6 +51,7 @@
 
   --radius-control: 6px;
   --radius-panel: 10px;
+  --radius-mark: 3px;
 
   --control-height: 2.5rem;
   --sidebar-width: 15.5rem;

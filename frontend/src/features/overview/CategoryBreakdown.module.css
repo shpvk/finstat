@@ -1,0 +1,128 @@
+.card {
+  margin-top: var(--space-6);
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+}
+
+.title {
+  margin-bottom: var(--space-4);
+  font-size: var(--font-size-md);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 13.5rem minmax(0, 1fr);
+  gap: var(--space-8);
+  align-items: center;
+}
+
+.chart {
+  position: relative;
+}
+
+.ring {
+  display: block;
+  width: 100%;
+  transform: rotate(-90deg);
+  animation: ring-in var(--duration-base) var(--ease-out);
+}
+
+.arc {
+  fill: none;
+  stroke-width: 22;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.arc[data-dimmed] {
+  opacity: 0.3;
+}
+
+.center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  padding: var(--space-10);
+  text-align: center;
+  pointer-events: none;
+}
+
+.centerValue {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  font-variant-numeric: var(--numeric-figures);
+  line-height: var(--line-height-tight);
+}
+
+.centerLabel {
+  margin-top: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  overflow-wrap: anywhere;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.table th,
+.table td {
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+}
+
+.table thead th {
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-medium);
+}
+
+.table tbody tr + tr > * {
+  border-top: 1px solid var(--color-border);
+}
+
+.table tbody tr {
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.table tbody tr[data-active] {
+  background: var(--color-surface-hover);
+}
+
+.table .name {
+  font-weight: var(--font-weight-regular);
+}
+
+.swatch {
+  display: inline-block;
+  width: var(--space-3);
+  height: var(--space-3);
+  margin-right: var(--space-2);
+  border-radius: var(--radius-mark);
+  vertical-align: -1px;
+}
+
+.table .number {
+  font-variant-numeric: var(--numeric-figures);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.badge {
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-control);
+  background: var(--color-surface-subtle);
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-medium);
+}
+
+@keyframes ring-in {
+  from {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.96);
+  }
+}

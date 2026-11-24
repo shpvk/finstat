@@ -1,0 +1,29 @@
+.section + .section {
+  margin-top: var(--space-12);
+}
+
+.heading {
+  margin-bottom: var(--space-4);
+  font-size: var(--font-size-lg);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.row + .row {
+  margin-top: var(--space-3);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6);
+}
+
+.stack {
+  display: grid;
+  gap: var(--space-6);
+}

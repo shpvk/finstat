@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:Finstat.Desktop.Core.ViewModels;assembly=Finstat.Desktop.Core"
+    xmlns:controls="clr-namespace:Finstat.Desktop.Controls"
+    x:Class="Finstat.Desktop.Views.OverviewView"
+    x:DataType="vm:OverviewViewModel">
+
+    <VerticalStackLayout Spacing="0">
+
+        <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,32">
+            <VerticalStackLayout>
+                <Label Text="Огляд" Style="{StaticResource PageTitle}" />
+                <Label Text="Скільки витрачено за місяць і на що" Style="{StaticResource PageDescription}" />
+            </VerticalStackLayout>
+            <controls:MonthSwitcher Grid.Column="1" BindingContext="{Binding Month}" VerticalOptions="Start" />
+        </Grid>
+
+        <controls:LoadingView IsVisible="{Binding IsLoading}" />
+
+        <controls:StateView
+            IsVisible="{Binding IsError}"
+            Icon="icon_alert.png"
+            Title="Помилка завантаження"
+            Description="{Binding ErrorMessage}"
+            ActionText="Спробувати ще раз"
+            ActionCommand="{Binding ReloadCommand}" />
+
+        <controls:StateView
+            IsVisible="{Binding IsEmpty}"
+            Title="{Binding EmptyTitle}"
+            Description="Запишіть першу витрату, і тут з’являться підсумки місяця."
+            ActionText="Додати витрату"
+            IsPrimaryAction="True"
+            ActionCommand="{Binding OpenExpensesCommand}" />
+
+        <VerticalStackLayout IsVisible="{Binding IsReady}" Spacing="24">
+
+            <Grid ColumnDefinitions="10*,13*" ColumnSpacing="24">
+                <Border Style="{StaticResource Panel}">
+                    <Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
+                        <Label Text="{Binding TotalLabel}" Style="{StaticResource CardLabel}" />
+                        <Label Grid.Row="1" Text="{Binding TotalText}" Style="{StaticResource Total}" />
+                        <Label Grid.Row="2" Text="{Binding CategoriesCountText}" Style="{StaticResource Muted}" Margin="0,4,0,0" />
+                        <Label Grid.Row="4" FontSize="14" Margin="0,24,0,0">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Найбільше — " />
+                                    <Span Text="{Binding TopCategoryName}" FontFamily="InterSemiBold" />
+                                    <Span Text=", " />
+                                    <Span Text="{Binding TopCategoryShare}" />
+                                    <Span Text=" витрат" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource Panel}">
+                    <VerticalStackLayout>
+                        <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,8">
+                            <Label Text="Останні операції" Style="{StaticResource CardTitle}" />
+                            <Button
+                                Grid.Column="1"
+                                Text="Усі витрати"
+                                ImageSource="icon_arrow_right.png"
+                                ContentLayout="Right,4"
+                                Style="{StaticResource LinkButton}"
+                                Command="{Binding OpenExpensesCommand}" />
+                        </Grid>
+                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding Recent}" Margin="0,16">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="vm:RecentItem">
+                                    <VerticalStackLayout>
+                                        <BoxView Style="{StaticResource Divider}" IsVisible="{Binding ShowDivider}" />
+                                        <Grid ColumnDefinitions="*,Auto" Padding="0,12" ColumnSpacing="16">
+                                            <VerticalStackLayout>
+                                                <Label Text="{Binding CategoryName}" FontFamily="InterMedium" />
+                                                <Label Text="{Binding MetaText}" Style="{StaticResource Muted}" LineBreakMode="TailTruncation" />
+                                            </VerticalStackLayout>
+                                            <Label Grid.Column="1" Text="{Binding AmountText}" FontFamily="InterMedium" VerticalOptions="Center" />
+                                        </Grid>
+                                    </VerticalStackLayout>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <Border Style="{StaticResource Panel}">
+                <VerticalStackLayout>
+                    <Label Text="Витрати за категоріями" Style="{StaticResource CardTitle}" Margin="0,0,0,16" />
+                    <Grid ColumnDefinitions="216,*" ColumnSpacing="32">
+                        <Grid WidthRequest="216" HeightRequest="216" VerticalOptions="Center">
+                            <controls:DonutChart
+                                Segments="{Binding Segments}"
+                                ActiveSegment="{Binding ActiveSegment}"
+                                SemanticProperties.Description="Частки категорій" />
+                            <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" InputTransparent="True" Padding="40,0">
+                                <Label Text="{Binding CenterValue}" FontFamily="InterSemiBold" FontSize="20" LineHeight="1.25" HorizontalTextAlignment="Center" />
+                                <Label Text="{Binding CenterLabel}" Style="{StaticResource Muted}" HorizontalTextAlignment="Center" Margin="0,4,0,0" />
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                            <Grid ColumnDefinitions="*,140,90" Padding="12,8">
+                                <Label Text="Категорія" Style="{StaticResource CardLabel}" />
+                                <Label Grid.Column="1" Text="Сума" Style="{StaticResource CardLabel}" HorizontalTextAlignment="End" />
+                                <Label Grid.Column="2" Text="Частка" Style="{StaticResource CardLabel}" HorizontalTextAlignment="End" />
+                            </Grid>
+                            <BoxView Style="{StaticResource Divider}" />
+                            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Rows}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:BreakdownRow">
+                                        <VerticalStackLayout>
+                                            <BoxView Style="{StaticResource Divider}" IsVisible="{Binding ShowDivider}" />
+                                            <Grid ColumnDefinitions="*,140,90" Padding="12,8">
+                                                <Grid.Triggers>
+                                                    <DataTrigger TargetType="Grid" Binding="{Binding IsActive}" Value="True">
+                                                        <Setter Property="BackgroundColor" Value="{StaticResource ColorSurfaceHover}" />
+                                                    </DataTrigger>
+                                                </Grid.Triggers>
+                                                <Grid.GestureRecognizers>
+                                                    <PointerGestureRecognizer
+                                                        PointerEnteredCommand="{Binding HoverRowCommand, Source={RelativeSource AncestorType={x:Type vm:OverviewViewModel}}, x:DataType=vm:OverviewViewModel}"
+                                                        PointerEnteredCommandParameter="{Binding .}"
+                                                        PointerExitedCommand="{Binding ClearHoverCommand, Source={RelativeSource AncestorType={x:Type vm:OverviewViewModel}}, x:DataType=vm:OverviewViewModel}" />
+                                                </Grid.GestureRecognizers>
+                                                <HorizontalStackLayout Spacing="8">
+                                                    <BoxView
+                                                        WidthRequest="12"
+                                                        HeightRequest="12"
+                                                        CornerRadius="3"
+                                                        VerticalOptions="Center"
+                                                        IsVisible="{Binding HasSegment}"
+                                                        Color="{Binding ColorIndex, Converter={StaticResource ChartColor}}" />
+                                                    <Label Text="{Binding Name}" FontSize="14" VerticalOptions="Center" />
+                                                    <Border Style="{StaticResource Badge}" IsVisible="{Binding IsArchived}">
+                                                        <Label Text="в архіві" Style="{StaticResource BadgeText}" />
+                                                    </Border>
+                                                </HorizontalStackLayout>
+                                                <Label Grid.Column="1" Text="{Binding AmountText}" FontSize="14" HorizontalTextAlignment="End" VerticalOptions="Center" />
+                                                <Label Grid.Column="2" Text="{Binding ShareText}" FontSize="14" HorizontalTextAlignment="End" VerticalOptions="Center" />
+                                            </Grid>
+                                        </VerticalStackLayout>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </VerticalStackLayout>
+
+</ContentView>

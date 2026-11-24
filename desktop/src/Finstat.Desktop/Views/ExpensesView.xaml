@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:Finstat.Desktop.Core.ViewModels;assembly=Finstat.Desktop.Core"
+    xmlns:controls="clr-namespace:Finstat.Desktop.Controls"
+    x:Class="Finstat.Desktop.Views.ExpensesView"
+    x:DataType="vm:ExpensesViewModel">
+
+    <VerticalStackLayout Spacing="0">
+
+        <VerticalStackLayout Margin="0,0,0,32">
+            <Label Text="Витрати" Style="{StaticResource PageTitle}" />
+            <Label Text="Записуйте витрати та переглядайте їх за місяцями" Style="{StaticResource PageDescription}" />
+        </VerticalStackLayout>
+
+        <Border Style="{StaticResource Panel}" Margin="0,0,0,40" BindingContext="{Binding Form}" x:DataType="vm:ExpenseFormViewModel">
+            <VerticalStackLayout>
+                <Label Text="{Binding Title}" Style="{StaticResource SectionTitle}" Margin="0,0,0,16" />
+
+                <Label
+                    IsVisible="{Binding ShowNoCategories, Source={RelativeSource AncestorType={x:Type vm:ExpensesViewModel}}, x:DataType=vm:ExpensesViewModel}"
+                    Style="{StaticResource Muted}">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{Binding NoCategoriesText, Source={RelativeSource AncestorType={x:Type vm:ExpensesViewModel}}, x:DataType=vm:ExpensesViewModel}" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Button
+                    IsVisible="{Binding ShowNoCategories, Source={RelativeSource AncestorType={x:Type vm:ExpensesViewModel}}, x:DataType=vm:ExpensesViewModel}"
+                    Text="Перейти до категорій"
+                    Style="{StaticResource LinkButton}"
+                    Margin="0,8,0,0"
+                    Command="{Binding OpenCategoriesCommand, Source={RelativeSource AncestorType={x:Type vm:ExpensesViewModel}}, x:DataType=vm:ExpensesViewModel}" />
+
+                <Grid
+                    IsVisible="{Binding ShowForm, Source={RelativeSource AncestorType={x:Type vm:ExpensesViewModel}}, x:DataType=vm:ExpensesViewModel}"
+                    ColumnDefinitions="10*,14*,10*"
+                    RowDefinitions="Auto,Auto"
+                    ColumnSpacing="12"
+                    RowSpacing="16">
+
+                    <VerticalStackLayout>
+                        <Label Text="Сума, грн" Style="{StaticResource FieldLabel}" />
+                        <controls:InputFrame HasError="{Binding AmountError, Converter={StaticResource HasText}}">
+                            <Entry Text="{Binding AmountText}" Placeholder="0,00" Keyboard="Numeric" SemanticProperties.Description="Сума, грн" />
+                        </controls:InputFrame>
+                        <controls:FieldError Text="{Binding AmountError}" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Column="1">
+                        <Label Text="Категорія" Style="{StaticResource FieldLabel}" />
+                        <controls:InputFrame HasError="{Binding CategoryError, Converter={StaticResource HasText}}">
+                            <Grid>
+                                <Picker
+                                    Title="Оберіть категорію"
+                                    ItemsSource="{Binding Options}"
+                                    ItemDisplayBinding="{Binding Label, x:DataType=vm:CategoryOption}"
+                                    SelectedItem="{Binding SelectedCategory}"
+                                    SemanticProperties.Description="Категорія" />
+                                <Image Source="icon_chevron_down.png" Style="{StaticResource InputAdornment}" />
+                            </Grid>
+                        </controls:InputFrame>
+                        <controls:FieldError Text="{Binding CategoryError}" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Column="2">
+                        <Label Text="Дата" Style="{StaticResource FieldLabel}" />
+                        <controls:InputFrame>
+                            <Grid>
+                                <DatePicker Date="{Binding Date}" Format="dd.MM.yyyy" SemanticProperties.Description="Дата" />
+                                <Image Source="icon_calendar.png" Style="{StaticResource InputAdornment}" />
+                            </Grid>
+                        </controls:InputFrame>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Row="1" Grid.ColumnSpan="2">
+                        <Label Text="Коментар" Style="{StaticResource FieldLabel}" />
+                        <controls:InputFrame>
+                            <Entry Text="{Binding Comment}" Placeholder="Необов’язково" MaxLength="200" SemanticProperties.Description="Коментар" />
+                        </controls:InputFrame>
+                    </VerticalStackLayout>
+
+                    <HorizontalStackLayout Grid.Row="1" Grid.Column="2" Spacing="8" Padding="0,29,0,0">
+                        <Button Text="{Binding SubmitText}" Style="{StaticResource PrimaryButton}" Command="{Binding SubmitCommand}" />
+                        <Button Text="Скасувати" Style="{StaticResource SecondaryButton}" Command="{Binding CancelCommand}" IsVisible="{Binding IsEditing}" />
+                    </HorizontalStackLayout>
+                </Grid>
+
+                <Label Text="{Binding FormError}" Style="{StaticResource ErrorText}" Margin="0,16,0,0" IsVisible="{Binding FormError, Converter={StaticResource HasText}}" />
+            </VerticalStackLayout>
+        </Border>
+
+        <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,12">
+            <controls:MonthSwitcher BindingContext="{Binding Month}" HorizontalOptions="Start" />
+            <Label Grid.Column="1" Text="{Binding CountText}" Style="{StaticResource Muted}" VerticalOptions="Center" />
+        </Grid>
+
+        <controls:LoadingView IsVisible="{Binding IsLoading}" />
+
+        <controls:StateView
+            IsVisible="{Binding IsError}"
+            Icon="icon_alert.png"
+            Title="Помилка завантаження"
+            Description="{Binding ErrorMessage}"
+            ActionText="Спробувати ще раз"
+            ActionCommand="{Binding ReloadCommand}" />
+
+        <controls:StateView
+            IsVisible="{Binding IsEmpty}"
+            Title="Витрат за цей місяць немає"
+            Description="Додайте витрату у формі вище, і вона з’явиться в цьому списку." />
+
+        <Border Style="{StaticResource ListPanel}" IsVisible="{Binding IsReady}">
+            <VerticalStackLayout>
+                <Grid ColumnDefinitions="223,252,*,120,133" Padding="16,12">
+                    <Label Text="Дата" Style="{StaticResource CardLabel}" />
+                    <Label Grid.Column="1" Text="Категорія" Style="{StaticResource CardLabel}" />
+                    <Label Grid.Column="2" Text="Коментар" Style="{StaticResource CardLabel}" />
+                    <Label Grid.Column="3" Text="Сума" Style="{StaticResource CardLabel}" HorizontalTextAlignment="End" />
+                </Grid>
+                <BoxView Style="{StaticResource Divider}" />
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Rows}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="vm:ExpenseRowViewModel">
+                            <VerticalStackLayout>
+                                <BoxView Style="{StaticResource Divider}" IsVisible="{Binding ShowDivider}" />
+
+                                <Grid ColumnDefinitions="223,252,*,120,133" Padding="16,8" MinimumHeightRequest="56" IsVisible="{Binding IsIdle}">
+                                    <HorizontalStackLayout Spacing="4" VerticalOptions="Center">
+                                        <Label Text="{Binding DayText}" FontSize="14" />
+                                        <Label Text="{Binding WeekdayText}" Style="{StaticResource Muted}" />
+                                    </HorizontalStackLayout>
+                                    <HorizontalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                        <Label Text="{Binding CategoryName}" FontSize="14" VerticalOptions="Center" />
+                                        <Border Style="{StaticResource Badge}" IsVisible="{Binding IsArchivedCategory}">
+                                            <Label Text="в архіві" Style="{StaticResource BadgeText}" />
+                                        </Border>
+                                    </HorizontalStackLayout>
+                                    <Label Grid.Column="2" Text="{Binding CommentText}" Style="{StaticResource Muted}" VerticalOptions="Center" LineBreakMode="TailTruncation" />
+                                    <Label Grid.Column="3" Text="{Binding AmountText}" Style="{StaticResource Amount}" VerticalOptions="Center" />
+                                    <HorizontalStackLayout Grid.Column="4" Spacing="4" HorizontalOptions="End" VerticalOptions="Center">
+                                        <ImageButton
+                                            Source="icon_pencil.png"
+                                            WidthRequest="50"
+                                            HeightRequest="40"
+                                            Padding="17,12"
+                                            CornerRadius="6"
+                                            BackgroundColor="Transparent"
+                                            ToolTipProperties.Text="Редагувати"
+                                            SemanticProperties.Description="Редагувати витрату"
+                                            Command="{Binding EditCommand, Source={RelativeSource AncestorType={x:Type vm:ExpensesViewModel}}, x:DataType=vm:ExpensesViewModel}"
+                                            CommandParameter="{Binding .}" />
+                                        <ImageButton
+                                            Source="icon_trash.png"
+                                            WidthRequest="50"
+                                            HeightRequest="40"
+                                            Padding="17,12"
+                                            CornerRadius="6"
+                                            BackgroundColor="Transparent"
+                                            ToolTipProperties.Text="Видалити"
+                                            SemanticProperties.Description="Видалити витрату"
+                                            Command="{Binding DeleteCommand, Source={RelativeSource AncestorType={x:Type vm:ExpensesViewModel}}, x:DataType=vm:ExpensesViewModel}"
+                                            CommandParameter="{Binding .}" />
+                                    </HorizontalStackLayout>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8" Padding="16" BackgroundColor="{StaticResource ColorSurfaceSubtle}" IsVisible="{Binding IsConfirmingDelete}">
+                                    <VerticalStackLayout VerticalOptions="Center">
+                                        <Label Text="{Binding ConfirmText}" FontFamily="InterMedium" />
+                                        <Label Text="Її буде прибрано з історії та статистики." Style="{StaticResource Muted}" />
+                                        <Label Text="{Binding DeleteError}" Style="{StaticResource ErrorText}" IsVisible="{Binding DeleteError, Converter={StaticResource HasText}}" />
+                                    </VerticalStackLayout>
+                                    <Button
+                                        Grid.Column="1"
+                                        Text="Видалити"
+                                        Style="{StaticResource DangerButton}"
+                                        VerticalOptions="Center"
+                                        Command="{Binding ConfirmDeleteCommand, Source={RelativeSource AncestorType={x:Type vm:ExpensesViewModel}}, x:DataType=vm:ExpensesViewModel}"
+                                        CommandParameter="{Binding .}" />
+                                    <Button
+                                        Grid.Column="2"
+                                        Text="Скасувати"
+                                        Style="{StaticResource SecondaryButton}"
+                                        VerticalOptions="Center"
+                                        Command="{Binding CancelDeleteCommand, Source={RelativeSource AncestorType={x:Type vm:ExpensesViewModel}}, x:DataType=vm:ExpensesViewModel}"
+                                        CommandParameter="{Binding .}" />
+                                </Grid>
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </Border>
+
+    </VerticalStackLayout>
+
+</ContentView>

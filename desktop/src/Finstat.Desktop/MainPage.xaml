@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:Finstat.Desktop.Core.ViewModels;assembly=Finstat.Desktop.Core"
+    xmlns:views="clr-namespace:Finstat.Desktop.Views"
+    x:Class="Finstat.Desktop.MainPage"
+    x:DataType="vm:ShellViewModel"
+    Title="Finstat">
+
+    <Grid ColumnDefinitions="248,*">
+
+        <Grid Grid.Column="0" BackgroundColor="{StaticResource ColorSurfaceSubtle}" ColumnDefinitions="*,1">
+            <VerticalStackLayout Padding="16,40,16,24" Spacing="32">
+                <HorizontalStackLayout Spacing="8" Padding="12,0">
+                    <Image Source="logo.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Center" />
+                    <Label Text="Finstat" FontFamily="InterSemiBold" FontSize="20" CharacterSpacing="-0.4" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+                <VerticalStackLayout Spacing="4" SemanticProperties.Description="Розділи">
+                    <Grid HeightRequest="36">
+                        <Button
+                            x:Name="OverviewItem"
+                            Style="{StaticResource NavButton}"
+                            Command="{Binding NavigateCommand}"
+                            CommandParameter="Overview"
+                            SemanticProperties.Description="Огляд">
+                            <Button.GestureRecognizers>
+                                <PointerGestureRecognizer PointerEntered="OnNavPointerEntered" PointerExited="OnNavPointerExited" />
+                            </Button.GestureRecognizers>
+                        </Button>
+                        <HorizontalStackLayout Spacing="8" Padding="12,0" VerticalOptions="Center" InputTransparent="True">
+                            <Image x:Name="OverviewIcon" WidthRequest="18" HeightRequest="18" Margin="3,0" />
+                            <Label x:Name="OverviewLabel" Text="Огляд" FontFamily="InterMedium" FontSize="14" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </Grid>
+                    <Grid HeightRequest="36">
+                        <Button
+                            x:Name="ExpensesItem"
+                            Style="{StaticResource NavButton}"
+                            Command="{Binding NavigateCommand}"
+                            CommandParameter="Expenses"
+                            SemanticProperties.Description="Витрати">
+                            <Button.GestureRecognizers>
+                                <PointerGestureRecognizer PointerEntered="OnNavPointerEntered" PointerExited="OnNavPointerExited" />
+                            </Button.GestureRecognizers>
+                        </Button>
+                        <HorizontalStackLayout Spacing="8" Padding="12,0" VerticalOptions="Center" InputTransparent="True">
+                            <Image x:Name="ExpensesIcon" WidthRequest="18" HeightRequest="18" Margin="3,0" />
+                            <Label x:Name="ExpensesLabel" Text="Витрати" FontFamily="InterMedium" FontSize="14" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </Grid>
+                    <Grid HeightRequest="36">
+                        <Button
+                            x:Name="CategoriesItem"
+                            Style="{StaticResource NavButton}"
+                            Command="{Binding NavigateCommand}"
+                            CommandParameter="Categories"
+                            SemanticProperties.Description="Категорії">
+                            <Button.GestureRecognizers>
+                                <PointerGestureRecognizer PointerEntered="OnNavPointerEntered" PointerExited="OnNavPointerExited" />
+                            </Button.GestureRecognizers>
+                        </Button>
+                        <HorizontalStackLayout Spacing="8" Padding="12,0" VerticalOptions="Center" InputTransparent="True">
+                            <Image x:Name="CategoriesIcon" WidthRequest="18" HeightRequest="18" Margin="3,0" />
+                            <Label x:Name="CategoriesLabel" Text="Категорії" FontFamily="InterMedium" FontSize="14" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+            <BoxView Grid.Column="1" Color="{StaticResource ColorBorder}" />
+        </Grid>
+
+        <ScrollView Grid.Column="1">
+            <Grid Padding="48,40" HorizontalOptions="Start" WidthRequest="1056">
+                <views:OverviewView x:Name="OverviewSection" BindingContext="{Binding Overview}" />
+                <views:ExpensesView x:Name="ExpensesSection" BindingContext="{Binding Expenses}" />
+                <views:CategoriesView x:Name="CategoriesSection" BindingContext="{Binding Categories}" />
+            </Grid>
+        </ScrollView>
+
+        <Border
+            Grid.Column="1"
+            x:Name="Toast"
+            BindingContext="{Binding Notifications}"
+            x:DataType="vm:NotificationCenter"
+            IsVisible="{Binding IsVisible}"
+            HorizontalOptions="End"
+            VerticalOptions="End"
+            Margin="24"
+            Padding="16,12"
+            BackgroundColor="{StaticResource ColorSurface}"
+            Stroke="{StaticResource ColorBorder}"
+            StrokeThickness="1"
+            StrokeShape="RoundRectangle 10">
+            <Border.Shadow>
+                <Shadow Brush="#151b24" Opacity="0.12" Radius="24" Offset="0,8" />
+            </Border.Shadow>
+            <HorizontalStackLayout Spacing="8">
+                <Image Source="icon_check.png" WidthRequest="16" HeightRequest="16" VerticalOptions="Center" />
+                <Label Text="{Binding Message}" FontFamily="InterMedium" FontSize="14" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+        </Border>
+
+    </Grid>
+
+</ContentPage>

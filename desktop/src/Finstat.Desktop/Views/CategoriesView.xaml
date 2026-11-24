@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:Finstat.Desktop.Core.ViewModels;assembly=Finstat.Desktop.Core"
+    xmlns:controls="clr-namespace:Finstat.Desktop.Controls"
+    x:Class="Finstat.Desktop.Views.CategoriesView"
+    x:DataType="vm:CategoriesViewModel">
+
+    <VerticalStackLayout Spacing="0">
+
+        <VerticalStackLayout Margin="0,0,0,32">
+            <Label Text="Категорії" Style="{StaticResource PageTitle}" />
+            <Label Text="Категорії допомагають бачити, на що саме йдуть гроші" Style="{StaticResource PageDescription}" />
+        </VerticalStackLayout>
+
+        <Border Style="{StaticResource Panel}" Margin="0,0,0,40">
+            <VerticalStackLayout>
+                <Label Text="Нова категорія" Style="{StaticResource FieldLabel}" />
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <controls:InputFrame HasError="{Binding NewNameError, Converter={StaticResource HasText}}">
+                        <Entry
+                            Text="{Binding NewName}"
+                            Placeholder="Наприклад, Транспорт"
+                            MaxLength="50"
+                            ReturnCommand="{Binding AddCommand}"
+                            SemanticProperties.Description="Нова категорія" />
+                    </controls:InputFrame>
+                    <Button Grid.Column="1" Text="Додати" Style="{StaticResource PrimaryButton}" Command="{Binding AddCommand}" />
+                </Grid>
+                <controls:FieldError Text="{Binding NewNameError}" />
+            </VerticalStackLayout>
+        </Border>
+
+        <controls:LoadingView IsVisible="{Binding IsLoading}" />
+
+        <controls:StateView
+            IsVisible="{Binding IsError}"
+            Icon="icon_alert.png"
+            Title="Помилка завантаження"
+            Description="{Binding ErrorMessage}"
+            ActionText="Спробувати ще раз"
+            ActionCommand="{Binding ReloadCommand}" />
+
+        <VerticalStackLayout IsVisible="{Binding IsReady}" Spacing="0">
+            <HorizontalStackLayout Spacing="8" Margin="0,0,0,12">
+                <Label Text="Активні" Style="{StaticResource SectionTitle}" />
+                <Label Text="{Binding ActiveCount}" Style="{StaticResource CardLabel}" VerticalOptions="End" Margin="0,0,0,3" />
+            </HorizontalStackLayout>
+
+            <controls:StateView
+                IsVisible="{Binding HasNoActive}"
+                Title="Активних категорій немає"
+                Description="Додайте категорію, щоб записувати в неї витрати." />
+
+            <Border Style="{StaticResource ListPanel}" IsVisible="{Binding HasActive}">
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Active}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="vm:CategoryRowViewModel">
+                            <VerticalStackLayout>
+                                <BoxView Style="{StaticResource Divider}" IsVisible="{Binding ShowDivider}" />
+
+                                <Grid ColumnDefinitions="*,Auto" Padding="16,8,8,8" MinimumHeightRequest="56" IsVisible="{Binding IsIdle}">
+                                    <Label Text="{Binding Name}" VerticalOptions="Center" />
+                                    <HorizontalStackLayout Grid.Column="1" Spacing="8">
+                                        <Button
+                                            Text="Перейменувати"
+                                            ImageSource="icon_pencil.png"
+                                            Style="{StaticResource GhostButton}"
+                                            Command="{Binding StartRenameCommand, Source={RelativeSource AncestorType={x:Type vm:CategoriesViewModel}}, x:DataType=vm:CategoriesViewModel}"
+                                            CommandParameter="{Binding .}" />
+                                        <Button
+                                            Text="Архівувати"
+                                            ImageSource="icon_archive.png"
+                                            Style="{StaticResource GhostButton}"
+                                            Command="{Binding StartArchiveCommand, Source={RelativeSource AncestorType={x:Type vm:CategoriesViewModel}}, x:DataType=vm:CategoriesViewModel}"
+                                            CommandParameter="{Binding .}" />
+                                    </HorizontalStackLayout>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8" Padding="16,8,8,8" IsVisible="{Binding IsEditing}">
+                                    <VerticalStackLayout>
+                                        <controls:InputFrame HasError="{Binding Error, Converter={StaticResource HasText}}">
+                                            <Entry
+                                                Text="{Binding EditName}"
+                                                MaxLength="50"
+                                                SemanticProperties.Description="Нова назва"
+                                                ReturnCommand="{Binding SaveRenameCommand, Source={RelativeSource AncestorType={x:Type vm:CategoriesViewModel}}, x:DataType=vm:CategoriesViewModel}"
+                                                ReturnCommandParameter="{Binding .}" />
+                                        </controls:InputFrame>
+                                        <controls:FieldError Text="{Binding Error}" />
+                                    </VerticalStackLayout>
+                                    <Button
+                                        Grid.Column="1"
+                                        Text="Зберегти"
+                                        Style="{StaticResource PrimaryButton}"
+                                        Command="{Binding SaveRenameCommand, Source={RelativeSource AncestorType={x:Type vm:CategoriesViewModel}}, x:DataType=vm:CategoriesViewModel}"
+                                        CommandParameter="{Binding .}" />
+                                    <Button
+                                        Grid.Column="2"
+                                        Text="Скасувати"
+                                        Style="{StaticResource SecondaryButton}"
+                                        Command="{Binding CancelRowCommand, Source={RelativeSource AncestorType={x:Type vm:CategoriesViewModel}}, x:DataType=vm:CategoriesViewModel}"
+                                        CommandParameter="{Binding .}" />
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8" Padding="16,8,8,8" IsVisible="{Binding IsConfirmingArchive}">
+                                    <VerticalStackLayout VerticalOptions="Center">
+                                        <Label Text="{Binding ArchiveQuestion}" FontFamily="InterMedium" />
+                                        <Label Text="Нові витрати в ній додати не вийде. Відновлення з архіву не передбачено." Style="{StaticResource Muted}" />
+                                        <Label Text="{Binding Error}" Style="{StaticResource ErrorText}" IsVisible="{Binding Error, Converter={StaticResource HasText}}" />
+                                    </VerticalStackLayout>
+                                    <Button
+                                        Grid.Column="1"
+                                        Text="Архівувати"
+                                        Style="{StaticResource DangerButton}"
+                                        VerticalOptions="Center"
+                                        Command="{Binding ConfirmArchiveCommand, Source={RelativeSource AncestorType={x:Type vm:CategoriesViewModel}}, x:DataType=vm:CategoriesViewModel}"
+                                        CommandParameter="{Binding .}" />
+                                    <Button
+                                        Grid.Column="2"
+                                        Text="Скасувати"
+                                        Style="{StaticResource SecondaryButton}"
+                                        VerticalOptions="Center"
+                                        Command="{Binding CancelRowCommand, Source={RelativeSource AncestorType={x:Type vm:CategoriesViewModel}}, x:DataType=vm:CategoriesViewModel}"
+                                        CommandParameter="{Binding .}" />
+                                </Grid>
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </Border>
+
+            <VerticalStackLayout IsVisible="{Binding HasArchived}" Margin="0,40,0,0">
+                <HorizontalStackLayout Spacing="8" Margin="0,0,0,12">
+                    <Label Text="Архів" Style="{StaticResource SectionTitle}" />
+                    <Label Text="{Binding ArchivedCount}" Style="{StaticResource CardLabel}" VerticalOptions="End" Margin="0,0,0,3" />
+                </HorizontalStackLayout>
+                <Label Text="Витрати в цих категоріях лишаються в історії та статистиці, але нові додати не можна." Style="{StaticResource Muted}" Margin="0,0,0,12" />
+                <Border Style="{StaticResource ListPanel}">
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding Archived}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="vm:ArchivedCategoryItem">
+                                <VerticalStackLayout>
+                                    <BoxView Style="{StaticResource Divider}" IsVisible="{Binding ShowDivider}" />
+                                    <Grid ColumnDefinitions="*,Auto" Padding="16,8" MinimumHeightRequest="56">
+                                        <Label Text="{Binding Name}" TextColor="{StaticResource ColorTextMuted}" VerticalOptions="Center" />
+                                        <Border Grid.Column="1" Style="{StaticResource Badge}">
+                                            <Label Text="В архіві" Style="{StaticResource BadgeText}" />
+                                        </Border>
+                                    </Grid>
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+
+    </VerticalStackLayout>
+
+</ContentView>

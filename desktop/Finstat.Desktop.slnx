@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Finstat.Desktop/Finstat.Desktop.csproj" />
+    <Project Path="src/Finstat.Desktop.Core/Finstat.Desktop.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Finstat.Desktop.Tests/Finstat.Desktop.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:Finstat.Desktop.Core.ViewModels;assembly=Finstat.Desktop.Core"
+    x:Class="Finstat.Desktop.Controls.MonthSwitcher"
+    x:DataType="vm:MonthState">
+
+    <HorizontalStackLayout Spacing="4" VerticalOptions="Center">
+        <ImageButton
+            Source="icon_chevron_left.png"
+            WidthRequest="40"
+            HeightRequest="40"
+            Padding="11"
+            CornerRadius="6"
+            BackgroundColor="Transparent"
+            SemanticProperties.Description="Попередній місяць"
+            ToolTipProperties.Text="Попередній місяць"
+            Command="{Binding PreviousCommand}" />
+        <Label
+            Text="{Binding Label}"
+            FontFamily="InterSemiBold"
+            MinimumWidthRequest="152"
+            HorizontalTextAlignment="Center"
+            VerticalTextAlignment="Center" />
+        <ImageButton
+            Source="icon_chevron_right.png"
+            WidthRequest="40"
+            HeightRequest="40"
+            Padding="11"
+            CornerRadius="6"
+            BackgroundColor="Transparent"
+            SemanticProperties.Description="Наступний місяць"
+            ToolTipProperties.Text="Наступний місяць"
+            Command="{Binding NextCommand}" />
+        <Button
+            Text="Поточний місяць"
+            Style="{StaticResource GhostButton}"
+            TextColor="{StaticResource ColorAccentText}"
+            Margin="8,0,0,0"
+            Padding="12,0"
+            IsVisible="{Binding IsCurrent, Converter={StaticResource InvertBool}}"
+            Command="{Binding CurrentCommand}" />
+    </HorizontalStackLayout>
+
+</ContentView>

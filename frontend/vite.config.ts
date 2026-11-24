@@ -14,6 +14,7 @@ export default defineConfig(({ mode }) => {
     },
     test: {
       environment: 'jsdom',
+      env: { TZ: 'Europe/Kyiv' },
       setupFiles: './src/test/setup.ts',
     },
   }

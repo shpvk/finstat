@@ -5,7 +5,10 @@ import { fakeApi } from './test/fakeApi.ts'
 
 beforeEach(() => {
   window.history.pushState({}, '', '/')
-  fakeApi({ 'GET /api/categories': () => ({ body: [] }) })
+  fakeApi({
+    'GET /api/categories': () => ({ body: [] }),
+    'GET /api/expenses': () => ({ body: [] }),
+  })
 })
 
 afterEach(() => {

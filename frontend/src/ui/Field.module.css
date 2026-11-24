@@ -107,6 +107,7 @@
 
 .hint,
 .error {
+  animation: fade-in var(--duration-fast) var(--ease-out);
   font-size: var(--font-size-sm);
 }
 
@@ -119,4 +120,10 @@
   align-items: center;
   gap: var(--space-1);
   color: var(--color-danger-text);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
 }

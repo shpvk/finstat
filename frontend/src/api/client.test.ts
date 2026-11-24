@@ -118,16 +118,35 @@ describe('apiRequest', () => {
   })
 
   it('reports an error without Problem Details by its status', async () => {
-    stubFetch(new Response('<html>Bad Gateway</html>', { status: 502 }))
+    stubFetch(new Response('<html>Server Error</html>', { status: 500 }))
 
     const error = await catchError(apiRequest('/categories'))
 
     expect(error).toBeInstanceOf(ApiError)
     expect(error).toMatchObject({
-      status: 502,
-      message: 'Сервер повернув помилку (502).',
+      status: 500,
+      message: 'Сервер повернув помилку (500).',
       problem: undefined,
     })
+  })
+
+  it.each([502, 503, 504])('explains that the server is unavailable on %i', async (status) => {
+    stubFetch(new Response('<html>Bad Gateway</html>', { status }))
+
+    const error = await catchError(apiRequest('/categories'))
+
+    expect(error).toMatchObject({
+      status,
+      message: 'Сервер зараз недоступний. Перевірте, що застосунок запущено, і спробуйте ще раз.',
+    })
+  })
+
+  it('keeps the server detail even when the server is unavailable', async () => {
+    stubFetch(json({ title: 'Service Unavailable', status: 503, detail: 'Йде оновлення бази.' }, 503, 'application/problem+json'))
+
+    const error = await catchError(apiRequest('/categories'))
+
+    expect(error).toMatchObject({ status: 503, message: 'Йде оновлення бази.' })
   })
 
   it('reports an unreachable server as an ApiError with status 0', async () => {

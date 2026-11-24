@@ -17,6 +17,9 @@ export function AppShell() {
 
   return (
     <div className={styles.shell}>
+      <a href="#content" className={styles.skip}>
+        Перейти до вмісту
+      </a>
       <aside className={styles.sidebar}>
         <p className={styles.wordmark}>
           <img src="/favicon.svg" alt="" width="24" height="24" />
@@ -42,8 +45,8 @@ export function AppShell() {
           </ul>
         </nav>
       </aside>
-      <main className={styles.content}>
-        <div className={styles.column}>
+      <main id="content" tabIndex={-1} className={styles.content}>
+        <div key={pathname} className={styles.column}>
           <Outlet />
         </div>
       </main>

@@ -18,6 +18,14 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
+it('lets keyboard users skip the navigation', () => {
+  render(<App />)
+
+  const skip = screen.getByRole('link', { name: 'Перейти до вмісту' })
+  expect(skip).toHaveAttribute('href', '#content')
+  expect(screen.getByRole('main')).toHaveAttribute('id', 'content')
+})
+
 it('opens the overview and switches sections from the navigation', () => {
   render(<App />)
 

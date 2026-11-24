@@ -105,6 +105,10 @@
   font-weight: var(--font-weight-medium);
 }
 
+.expanded td > * {
+  animation: fade-in var(--duration-fast) var(--ease-out);
+}
+
 .expanded td {
   padding: var(--space-4);
   background: var(--color-surface-subtle);
@@ -129,4 +133,10 @@
 .error {
   color: var(--color-danger-text);
   font-size: var(--font-size-sm);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
 }

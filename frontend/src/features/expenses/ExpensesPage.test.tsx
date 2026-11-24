@@ -54,6 +54,7 @@ const lunch: Expense = {
 }
 
 afterEach(() => {
+  vi.useRealTimers()
   vi.unstubAllGlobals()
 })
 
@@ -68,7 +69,8 @@ describe('ExpensesPage', () => {
     expect(rows[1]).toHaveTextContent('20 листопада')
     expect(rows[1]).toHaveTextContent('Обід')
     expect(rows[1].textContent).toMatch(/1\s250,50/)
-    expect(rows[2]).toHaveTextContent('Таксів архіві')
+    expect(rows[1]).toHaveTextContent(/20 листопада \S+/)
+    expect(rows[2]).toHaveTextContent('Таксі в архіві')
     expect(screen.getByText('2 витрати')).toBeInTheDocument()
   })
 
@@ -101,7 +103,6 @@ describe('ExpensesPage', () => {
     renderPage()
 
     expect(await screen.findByLabelText('Дата')).toHaveValue('2026-11-24')
-    vi.useRealTimers()
   })
 
   it('checks the form before sending', async () => {
@@ -127,7 +128,7 @@ describe('ExpensesPage', () => {
     fireEvent.change(screen.getByLabelText('Дата'), { target: { value: '2026-10-05' } })
     fireEvent.click(screen.getByRole('button', { name: 'Додати' }))
 
-    expect(await screen.findByText('Витрату додано в жовтень 2026')).toBeInTheDocument()
+    expect(await screen.findByText('Витрату додано за жовтень 2026')).toBeInTheDocument()
     expect(screen.getByText('Жовтень 2026')).toBeInTheDocument()
     expect(await screen.findByText('5 жовтня')).toBeInTheDocument()
     expect(requests(fetchMock, 'GET').some(([url]) => String(url).endsWith('month=2026-10'))).toBe(true)
@@ -171,6 +172,73 @@ describe('ExpensesPage', () => {
       'Їжа',
       'Таксі (в архіві)',
     ])
+  })
+
+  it('removes an expense moved to another month and keeps focus in the list', async () => {
+    const expenses = [lunch, { ...lunch, id: 'e2', amount: '40', date: '2026-11-03', comment: null }]
+    fakeApi({
+      'GET /api/categories': () => ({ body: categories }),
+      'GET /api/expenses': () => ({ body: expenses.filter((e) => e.date.startsWith('2026-11')) }),
+      'PUT /api/expenses/e1': ({ body }) => {
+        expenses[0] = { id: 'e1', ...(body as Omit<Expense, 'id'>) }
+        return { body: expenses[0] }
+      },
+    })
+    renderPage()
+
+    fireEvent.click(await screen.findByRole('button', { name: /Редагувати витрату 1/ }))
+    fireEvent.change(screen.getAllByLabelText('Дата')[1], { target: { value: '2026-12-01' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Зберегти' }))
+
+    expect(await screen.findByText('Витрату перенесено на грудень 2026')).toBeInTheDocument()
+    expect(screen.queryByText('Обід')).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Редагувати витрату 40/ })).toHaveFocus()
+  })
+
+  it('cancels editing with Escape and moves focus between rows', async () => {
+    const fetchMock = expensesApi([
+      lunch,
+      { ...lunch, id: 'e2', amount: '40', date: '2026-11-03', comment: null },
+    ]).fetchMock
+    renderPage()
+
+    fireEvent.click(await screen.findByRole('button', { name: /Редагувати витрату 1/ }))
+    fireEvent.click(screen.getByRole('button', { name: /Видалити витрату 40/ }))
+    const confirm = screen.getByRole('group', { name: 'Видалення витрати' })
+    expect(within(confirm).getByRole('button', { name: 'Скасувати' })).toHaveFocus()
+    expect(screen.queryByRole('button', { name: 'Зберегти' })).not.toBeInTheDocument()
+
+    fireEvent.keyDown(confirm, { key: 'Escape' })
+    expect(screen.getByRole('button', { name: /Видалити витрату 40/ })).toHaveFocus()
+    expect(requests(fetchMock, 'DELETE')).toHaveLength(0)
+  })
+
+  it('does not offer archived categories when editing an active one', async () => {
+    expensesApi([lunch])
+    renderPage()
+
+    fireEvent.click(await screen.findByRole('button', { name: /Редагувати витрату/ }))
+    const select = screen.getAllByLabelText('Категорія')[1]
+    expect(within(select).getAllByRole('option').map((o) => o.textContent)).toEqual([
+      'Оберіть категорію',
+      'Їжа',
+    ])
+  })
+
+  it('keeps the row when deleting fails', async () => {
+    fakeApi({
+      'GET /api/categories': () => ({ body: categories }),
+      'GET /api/expenses': () => ({ body: [lunch] }),
+      'DELETE /api/expenses/e1': () => problem('Витрату не знайдено', 404),
+    })
+    renderPage()
+
+    fireEvent.click(await screen.findByRole('button', { name: /Видалити витрату/ }))
+    const confirm = screen.getByRole('group', { name: 'Видалення витрати' })
+    fireEvent.click(within(confirm).getByRole('button', { name: 'Видалити' }))
+
+    expect(await within(confirm).findByRole('alert')).toHaveTextContent('Витрату не знайдено')
+    expect(screen.getByRole('table')).toBeInTheDocument()
   })
 
   it('deletes an expense after confirmation', async () => {

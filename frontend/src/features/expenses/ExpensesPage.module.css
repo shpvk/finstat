@@ -39,11 +39,6 @@
   border-spacing: 0;
   border-radius: var(--radius-panel);
   font-size: var(--font-size-sm);
-  transition: opacity var(--duration-base) var(--ease-out);
-}
-
-.table[aria-busy='true'] {
-  opacity: 0.6;
 }
 
 .table th {
@@ -69,7 +64,7 @@
 }
 
 .weekday {
-  margin-left: var(--space-2);
+  margin-left: var(--space-1);
   color: var(--color-text-muted);
 }
 
@@ -102,7 +97,7 @@
 }
 
 .badge {
-  margin-left: var(--space-2);
+  margin-left: var(--space-1);
   padding: 0 var(--space-2);
   border-radius: var(--radius-control);
   background: var(--color-surface-subtle);

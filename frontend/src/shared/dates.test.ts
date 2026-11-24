@@ -3,6 +3,8 @@ import { currentMonth, formatDay, formatMonth, monthOf, shiftMonth, todayIso } f
 
 describe('dates', () => {
   it('takes today from the local calendar date', () => {
+    expect(new Date(2026, 0, 5, 0, 30).getTimezoneOffset()).not.toBe(0)
+    expect(todayIso(new Date(2026, 0, 5, 0, 30))).toBe('2026-01-05')
     expect(todayIso(new Date(2026, 0, 5, 23, 59))).toBe('2026-01-05')
     expect(currentMonth(new Date(2026, 11, 31, 23, 59))).toBe('2026-12')
   })

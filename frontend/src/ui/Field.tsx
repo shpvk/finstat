@@ -4,6 +4,7 @@ import styles from './Field.module.css'
 
 export interface FieldProps {
   label: string
+  hideLabel?: boolean
   hint?: string
   error?: string
 }
@@ -19,14 +20,14 @@ interface FieldWrapperProps extends FieldProps {
   children: (control: ControlProps) => ReactNode
 }
 
-export function Field({ label, hint, error, id, children }: FieldWrapperProps) {
+export function Field({ label, hideLabel, hint, error, id, children }: FieldWrapperProps) {
   const generatedId = useId()
   const controlId = id ?? generatedId
   const messageId = `${controlId}-message`
 
   return (
     <div className={styles.field}>
-      <label className={styles.label} htmlFor={controlId}>
+      <label className={hideLabel ? 'visually-hidden' : styles.label} htmlFor={controlId}>
         {label}
       </label>
       {children({

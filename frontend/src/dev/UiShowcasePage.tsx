@@ -20,6 +20,7 @@ export default function UiShowcasePage() {
           <Button variant="primary">Зберегти</Button>
           <Button>Скасувати</Button>
           <Button variant="danger">Видалити</Button>
+          <Button variant="ghost">Перейменувати</Button>
         </div>
         <div className={styles.row}>
           <Button variant="primary" loading>

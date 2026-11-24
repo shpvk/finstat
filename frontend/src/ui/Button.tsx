@@ -3,7 +3,7 @@ import type { ButtonHTMLAttributes } from 'react'
 import styles from './Button.module.css'
 
 interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'className'> {
-  variant?: 'primary' | 'secondary' | 'danger'
+  variant?: 'primary' | 'secondary' | 'danger' | 'ghost'
   loading?: boolean
 }
 

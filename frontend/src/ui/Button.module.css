@@ -71,6 +71,29 @@
   background: var(--color-danger-active);
 }
 
+.ghost {
+  box-shadow: none;
+}
+
+.ghost:enabled {
+  background: transparent;
+  color: var(--color-text-muted);
+}
+
+.ghost:enabled:hover:not([aria-disabled='true']) {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.ghost:enabled:active:not([aria-disabled='true']) {
+  background: var(--color-surface-active);
+}
+
+.ghost:disabled {
+  border-color: transparent;
+  background: transparent;
+}
+
 .spinner {
   animation: spin 0.8s linear infinite;
 }

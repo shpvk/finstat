@@ -6,9 +6,9 @@ import styles from './Field.module.css'
 interface SelectProps
   extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'className'>, FieldProps {}
 
-export function Select({ label, hint, error, id, children, ...select }: SelectProps) {
+export function Select({ label, hideLabel, hint, error, id, children, ...select }: SelectProps) {
   return (
-    <Field label={label} hint={hint} error={error} id={id}>
+    <Field label={label} hideLabel={hideLabel} hint={hint} error={error} id={id}>
       {(control) => (
         <span className={styles.controlWrap}>
           <select {...select} {...control} className={`${styles.control} ${styles.select}`}>

@@ -9,7 +9,6 @@ export default defineConfig({
     baseURL: process.env.E2E_BASE_URL ?? 'http://localhost:3000',
     channel: process.env.E2E_BROWSER_CHANNEL ?? 'chrome',
     locale: 'uk-UA',
-    timezoneId: 'Europe/Kyiv',
     viewport: { width: 1280, height: 800 },
     trace: 'retain-on-failure',
   },

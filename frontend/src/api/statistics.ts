@@ -1,3 +1,4 @@
+import { compareAmounts } from '../shared/money.ts'
 import { apiRequest } from './client.ts'
 import type { Expense } from './expenses.ts'
 
@@ -14,6 +15,10 @@ export interface MonthStatistics {
   total: string
   categories: CategoryStatistics[]
   recent: Expense[]
+}
+
+export function byTotalDesc(a: CategoryStatistics, b: CategoryStatistics) {
+  return compareAmounts(b.total, a.total) || a.name.localeCompare(b.name, 'uk')
 }
 
 export function getStatistics(month: string, signal?: AbortSignal) {

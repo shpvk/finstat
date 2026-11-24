@@ -1,9 +1,9 @@
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router'
-import { getStatistics, type MonthStatistics } from '../../api/statistics.ts'
+import { byTotalDesc, getStatistics, type MonthStatistics } from '../../api/statistics.ts'
 import { useResource } from '../../api/useResource.ts'
 import { formatDay, formatMonth } from '../../shared/dates.ts'
-import { compareAmounts, formatMoney, formatShare } from '../../shared/money.ts'
+import { formatMoney, formatShare } from '../../shared/money.ts'
 import { useMonth } from '../../shared/monthContext.ts'
 import { ButtonLink } from '../../ui/Button.tsx'
 import { MonthSwitcher } from '../../ui/MonthSwitcher.tsx'
@@ -56,7 +56,7 @@ export function OverviewPage() {
 }
 
 function Summary({ statistics, monthName }: { statistics: MonthStatistics; monthName: string }) {
-  const byTotal = [...statistics.categories].sort((a, b) => compareAmounts(b.total, a.total))
+  const byTotal = [...statistics.categories].sort(byTotalDesc)
   const top = byTotal[0]
   const names = new Map(statistics.categories.map((c) => [c.categoryId, c.name]))
   const count = statistics.categories.length

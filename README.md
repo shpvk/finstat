@@ -19,9 +19,9 @@ docker compose up --build
 
 Пароль не должен содержать `;` и `'`: он подставляется в строку подключения.
 
-API: http://localhost:8080 (`/health`). PostgreSQL хранится в именованном томе `finstat-pgdata`.
+Приложение: http://localhost:3000. API: http://localhost:8080 (`/health`). PostgreSQL хранится в именованном томе `finstat-pgdata`.
 Остановка: `docker compose down`. Флаг `-v` удаляет данные — только осознанно.
-Порты хоста меняются через `API_PORT` и `DB_PORT` в `.env`.
+Порты хоста меняются через `WEB_PORT`, `API_PORT` и `DB_PORT` в `.env` (если порт 5432 занят локальным PostgreSQL, укажите, например, `DB_PORT=5433`).
 
 ## Локальная разработка
 

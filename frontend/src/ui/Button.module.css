@@ -10,6 +10,7 @@
   box-shadow: var(--shadow-control);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
+  text-decoration: none;
   line-height: 1;
   white-space: nowrap;
   cursor: pointer;
@@ -31,43 +32,43 @@
   cursor: not-allowed;
 }
 
-.primary:enabled {
+.primary:is(:enabled, a) {
   background: var(--color-accent);
   color: var(--color-on-accent);
 }
 
-.primary:enabled:hover:not([aria-disabled='true']) {
+.primary:is(:enabled, a):hover:not([aria-disabled='true']) {
   background: var(--color-accent-hover);
 }
 
-.primary:enabled:active:not([aria-disabled='true']) {
+.primary:is(:enabled, a):active:not([aria-disabled='true']) {
   background: var(--color-accent-active);
 }
 
-.secondary:enabled {
+.secondary:is(:enabled, a) {
   border-color: var(--color-border-strong);
   background: var(--color-surface);
   color: var(--color-text);
 }
 
-.secondary:enabled:hover:not([aria-disabled='true']) {
+.secondary:is(:enabled, a):hover:not([aria-disabled='true']) {
   background: var(--color-surface-hover);
 }
 
-.secondary:enabled:active:not([aria-disabled='true']) {
+.secondary:is(:enabled, a):active:not([aria-disabled='true']) {
   background: var(--color-surface-active);
 }
 
-.danger:enabled {
+.danger:is(:enabled, a) {
   background: var(--color-danger);
   color: var(--color-on-accent);
 }
 
-.danger:enabled:hover:not([aria-disabled='true']) {
+.danger:is(:enabled, a):hover:not([aria-disabled='true']) {
   background: var(--color-danger-hover);
 }
 
-.danger:enabled:active:not([aria-disabled='true']) {
+.danger:is(:enabled, a):active:not([aria-disabled='true']) {
   background: var(--color-danger-active);
 }
 
@@ -75,17 +76,17 @@
   box-shadow: none;
 }
 
-.ghost:enabled {
+.ghost:is(:enabled, a) {
   background: transparent;
   color: var(--color-text-muted);
 }
 
-.ghost:enabled:hover:not([aria-disabled='true']) {
+.ghost:is(:enabled, a):hover:not([aria-disabled='true']) {
   background: var(--color-surface-hover);
   color: var(--color-text);
 }
 
-.ghost:enabled:active:not([aria-disabled='true']) {
+.ghost:is(:enabled, a):active:not([aria-disabled='true']) {
   background: var(--color-surface-active);
 }
 

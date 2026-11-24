@@ -8,6 +8,9 @@ beforeEach(() => {
   fakeApi({
     'GET /api/categories': () => ({ body: [] }),
     'GET /api/expenses': () => ({ body: [] }),
+    'GET /api/statistics': () => ({
+      body: { month: '2026-11', total: '0.00', categories: [], recent: [] },
+    }),
   })
 })
 

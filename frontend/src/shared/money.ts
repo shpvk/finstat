@@ -9,6 +9,24 @@ export function formatMoney(amount: string) {
   return moneyFormat.format(amount as Intl.StringNumericLiteral)
 }
 
+const shareFormat = new Intl.NumberFormat('uk-UA', {
+  minimumFractionDigits: 1,
+  maximumFractionDigits: 1,
+})
+
+export function formatShare(share: string) {
+  return `${shareFormat.format(share as Intl.StringNumericLiteral)} %`
+}
+
+export function compareAmounts(a: string, b: string) {
+  const [aInteger, aFraction = ''] = a.split('.')
+  const [bInteger, bFraction = ''] = b.split('.')
+  if (aInteger.length !== bInteger.length) return aInteger.length - bInteger.length
+  const left = `${aInteger}.${aFraction.padEnd(2, '0')}`
+  const right = `${bInteger}.${bFraction.padEnd(2, '0')}`
+  return left < right ? -1 : left > right ? 1 : 0
+}
+
 export function amountToInput(amount: string) {
   return amount.replace('.', ',')
 }

@@ -1,0 +1,112 @@
+.addForm {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin-bottom: var(--space-10);
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+}
+
+.grow {
+  flex: 1;
+  min-width: 0;
+}
+
+.addButton {
+  padding-top: calc(var(--font-size-sm) * var(--line-height-normal) + var(--space-2));
+}
+
+.section + .section {
+  margin-top: var(--space-10);
+}
+
+.heading {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  font-size: var(--font-size-lg);
+}
+
+.count {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  font-variant-numeric: var(--numeric-figures);
+}
+
+.note {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.section > .note {
+  margin-bottom: var(--space-3);
+}
+
+.list {
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-height: calc(var(--control-height) + 2 * var(--space-2));
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
+}
+
+.row + .row {
+  border-top: 1px solid var(--color-border);
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  display: flex;
+  flex: none;
+  gap: var(--space-2);
+}
+
+.inlineForm {
+  display: flex;
+  flex: 1;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding-block: var(--space-1);
+}
+
+.confirmTitle {
+  font-weight: var(--font-weight-medium);
+}
+
+.confirmError {
+  color: var(--color-danger-text);
+  font-size: var(--font-size-sm);
+}
+
+.archived {
+  padding-right: var(--space-4);
+}
+
+.archived .name {
+  color: var(--color-text-muted);
+}
+
+.badge {
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-control);
+  background: var(--color-surface-subtle);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+}

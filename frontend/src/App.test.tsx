@@ -1,9 +1,15 @@
 import { fireEvent, render, screen } from '@testing-library/react'
-import { beforeEach, expect, it } from 'vitest'
+import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import App from './App.tsx'
+import { fakeApi } from './test/fakeApi.ts'
 
 beforeEach(() => {
   window.history.pushState({}, '', '/')
+  fakeApi({ 'GET /api/categories': () => ({ body: [] }) })
+})
+
+afterEach(() => {
+  vi.unstubAllGlobals()
 })
 
 it('opens the overview and switches sections from the navigation', () => {

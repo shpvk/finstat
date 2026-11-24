@@ -1,16 +1,15 @@
 import { Calendar } from 'lucide-react'
-import type { InputHTMLAttributes } from 'react'
+import type { ComponentProps } from 'react'
 import { Field, type FieldProps } from './Field.tsx'
 import styles from './Field.module.css'
 
-interface TextFieldProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'className'>, FieldProps {}
+interface TextFieldProps extends Omit<ComponentProps<'input'>, 'className'>, FieldProps {}
 
-export function TextField({ label, hint, error, id, type, ...input }: TextFieldProps) {
+export function TextField({ label, hideLabel, hint, error, id, type, ...input }: TextFieldProps) {
   const isDate = type === 'date'
 
   return (
-    <Field label={label} hint={hint} error={error} id={id}>
+    <Field label={label} hideLabel={hideLabel} hint={hint} error={error} id={id}>
       {(control) => (
         <span className={styles.controlWrap}>
           <input

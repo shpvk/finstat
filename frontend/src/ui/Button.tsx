@@ -1,9 +1,9 @@
 import { LoaderCircle } from 'lucide-react'
-import type { ButtonHTMLAttributes } from 'react'
+import type { ComponentProps } from 'react'
 import styles from './Button.module.css'
 
-interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'className'> {
-  variant?: 'primary' | 'secondary' | 'danger'
+interface ButtonProps extends Omit<ComponentProps<'button'>, 'className'> {
+  variant?: 'primary' | 'secondary' | 'danger' | 'ghost'
   loading?: boolean
 }
 

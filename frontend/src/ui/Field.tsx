@@ -36,13 +36,13 @@ export function Field({ label, hideLabel, hint, error, id, children }: FieldWrap
         'aria-describedby': error || hint ? messageId : undefined,
       })}
       {error ? (
-        <p id={messageId} className={styles.error} role="alert">
+        <p key="error" id={messageId} className={styles.error} role="alert">
           <CircleAlert size={14} strokeWidth={2} aria-hidden="true" />
           {error}
         </p>
       ) : (
         hint && (
-          <p id={messageId} className={styles.hint}>
+          <p key="hint" id={messageId} className={styles.hint}>
             {hint}
           </p>
         )

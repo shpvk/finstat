@@ -10,22 +10,31 @@
 
 ## Скриншоты
 
-| Огляд | Витрати | Категорії |
-| --- | --- | --- |
-| ![Огляд](docs/screenshots/overview.png) | ![Витрати](docs/screenshots/expenses.png) | ![Категорії](docs/screenshots/categories.png) |
+**Огляд** — итог месяца, последние операции, доли категорий:
+
+![Огляд](docs/screenshots/overview.png)
+
+**Витрати** — форма и список за выбранный месяц:
+
+![Витрати](docs/screenshots/expenses.png)
+
+**Категорії** — активные и архив:
+
+![Категорії](docs/screenshots/categories.png)
 
 ## Запуск одной командой
 
 Нужен только Docker (Docker Desktop на Windows и macOS).
 
+Один раз скопируйте `.env.example` в `.env` и задайте в нём `POSTGRES_PASSWORD` (в cmd: `copy .env.example .env`, в PowerShell и bash: `cp .env.example .env`). Дальше всё приложение запускается одной командой:
+
 ```
-cp .env.example .env     # задайте POSTGRES_PASSWORD
 docker compose up --build
 ```
 
 Пароль не должен содержать `;` и `'`: он подставляется в строку подключения. Первая сборка образов занимает несколько минут.
 
-Приложение: http://localhost:3000. API: http://localhost:8080 (`/health`). PostgreSQL хранится в именованном томе `finstat-pgdata`, поэтому данные переживают перезапуск контейнеров.
+Приложение: http://localhost:3000. API: http://localhost:8080 (`/health`). PostgreSQL хранится в именованном томе `finstat-pgdata` (Docker добавляет к имени префикс проекта, например `proektnet_finstat-pgdata`), поэтому данные переживают перезапуск и пересоздание контейнеров.
 Остановка: `docker compose down`. Флаг `-v` удаляет данные — только осознанно.
 Порты хоста меняются через `WEB_PORT`, `API_PORT` и `DB_PORT` в `.env` (если порт 5432 занят локальным PostgreSQL, укажите, например, `DB_PORT=5433`).
 
@@ -72,6 +81,8 @@ React + TypeScript (strict) + Vite, код разложен по раздела�
 
 ## Локальная разработка
 
+Нужны .NET SDK 10 (версия зафиксирована в `backend/global.json`), Node.js 22.13+ или 24 и Docker для базы и тестов.
+
 БД из Compose, API локально:
 
 ```
@@ -114,12 +125,15 @@ npm test
 npm run build
 ```
 
-Сквозной браузерный тест основного сценария (добавить расход → итог и статистика обновились → данные пережили перезапуск контейнеров), против запущенного `docker compose up`:
+Сквозной браузерный тест основного сценария (добавить расход → итог и статистика обновились → данные пережили пересоздание контейнеров), против запущенного `docker compose up`:
 
 ```
 cd frontend
+npm ci
 npm run test:e2e
 ```
+
+Нужен установленный Google Chrome; без него — `npx playwright install chromium` и переменная `E2E_BROWSER_CHANNEL=chromium`. Тест добавляет один расход и удаляет его в конце. Подробнее — `frontend/README.md`.
 
 ## Миграции
 

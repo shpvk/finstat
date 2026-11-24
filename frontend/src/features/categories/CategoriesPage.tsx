@@ -201,7 +201,9 @@ function ActiveCategoryRow({
     }
     if (opened.current) {
       const opener = opened.current === 'rename' ? renameButton : archiveButton
-      opener.current?.focus()
+      if (!document.activeElement || document.activeElement === document.body) {
+        opener.current?.focus()
+      }
       opened.current = null
     }
   }, [action])

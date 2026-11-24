@@ -195,6 +195,21 @@ describe('CategoriesPage', () => {
     expect(fetchMock.mock.calls.some(([, init]) => init?.method === 'PUT')).toBe(false)
   })
 
+  it('moves focus to the row that was opened last', async () => {
+    categoriesApi([
+      { id: '1', name: 'Їжа', isArchived: false },
+      { id: '2', name: 'Таксі', isArchived: false },
+    ])
+    renderPage()
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Перейменувати «Їжа»' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Архівувати «Таксі»' }))
+
+    expect(screen.queryByLabelText('Нова назва для «Їжа»')).not.toBeInTheDocument()
+    const confirm = screen.getByRole('group', { name: 'Архівування «Таксі»' })
+    expect(within(confirm).getByRole('button', { name: 'Скасувати' })).toHaveFocus()
+  })
+
   it('shows why archiving failed and keeps the category active', async () => {
     fakeApi({
       'GET /api/categories': () => ({ body: [{ id: '1', name: 'Їжа', isArchived: false }] }),

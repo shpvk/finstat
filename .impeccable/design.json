@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-15T00:00:00Z",
+  "title": "Design System: Finstat",
+  "extensions": {
+    "colorMeta": {
+      "accent": { "role": "primary", "displayName": "Уверенный синий", "canonical": "#1f5ed9", "tonalRamp": ["oklch(15% 0.19 262)", "oklch(27% 0.19 262)", "oklch(39% 0.19 262)", "oklch(51% 0.19 262)", "oklch(63% 0.19 262)", "oklch(75% 0.14 262)", "oklch(86% 0.08 262)", "oklch(95% 0.03 262)"] },
+      "accent-hover": { "role": "primary", "displayName": "Синий наведения", "canonical": "#134ac5", "tonalRamp": ["oklch(15% 0.19 262)", "oklch(27% 0.19 262)", "oklch(39% 0.19 262)", "oklch(51% 0.19 262)", "oklch(63% 0.19 262)", "oklch(75% 0.14 262)", "oklch(86% 0.08 262)", "oklch(95% 0.03 262)"] },
+      "accent-active": { "role": "primary", "displayName": "Синий нажатия", "canonical": "#103baf", "tonalRamp": ["oklch(15% 0.19 262)", "oklch(27% 0.19 262)", "oklch(39% 0.19 262)", "oklch(51% 0.19 262)", "oklch(63% 0.19 262)", "oklch(75% 0.14 262)", "oklch(86% 0.08 262)", "oklch(95% 0.03 262)"] },
+      "accent-subtle": { "role": "primary", "displayName": "Синяя дымка", "canonical": "#e7f1ff", "tonalRamp": ["oklch(15% 0.19 262)", "oklch(27% 0.19 262)", "oklch(39% 0.19 262)", "oklch(51% 0.19 262)", "oklch(63% 0.19 262)", "oklch(75% 0.14 262)", "oklch(86% 0.08 262)", "oklch(95% 0.03 262)"] },
+      "accent-text": { "role": "primary", "displayName": "Синий для текста", "canonical": "#1245b9", "tonalRamp": ["oklch(15% 0.19 262)", "oklch(27% 0.19 262)", "oklch(39% 0.19 262)", "oklch(51% 0.19 262)", "oklch(63% 0.19 262)", "oklch(75% 0.14 262)", "oklch(86% 0.08 262)", "oklch(95% 0.03 262)"] },
+      "on-accent": { "role": "primary", "displayName": "Белый на акценте", "canonical": "#ffffff", "tonalRamp": ["oklch(15% 0.015 255)", "oklch(27% 0.015 255)", "oklch(39% 0.015 255)", "oklch(51% 0.015 255)", "oklch(63% 0.015 255)", "oklch(75% 0.012 255)", "oklch(86% 0.008 255)", "oklch(95% 0.005 255)"] },
+      "danger": { "role": "secondary", "displayName": "Сигнальный красный", "canonical": "#c51e21", "tonalRamp": ["oklch(15% 0.2 27)", "oklch(27% 0.2 27)", "oklch(39% 0.2 27)", "oklch(51% 0.2 27)", "oklch(63% 0.2 27)", "oklch(75% 0.13 27)", "oklch(86% 0.07 27)", "oklch(95% 0.03 27)"] },
+      "danger-hover": { "role": "secondary", "displayName": "Красный наведения", "canonical": "#ac0311", "tonalRamp": ["oklch(15% 0.2 27)", "oklch(27% 0.2 27)", "oklch(39% 0.2 27)", "oklch(51% 0.2 27)", "oklch(63% 0.2 27)", "oklch(75% 0.13 27)", "oklch(86% 0.07 27)", "oklch(95% 0.03 27)"] },
+      "danger-active": { "role": "secondary", "displayName": "Красный нажатия", "canonical": "#94020d", "tonalRamp": ["oklch(15% 0.2 27)", "oklch(27% 0.2 27)", "oklch(39% 0.2 27)", "oklch(51% 0.2 27)", "oklch(63% 0.2 27)", "oklch(75% 0.13 27)", "oklch(86% 0.07 27)", "oklch(95% 0.03 27)"] },
+      "danger-text": { "role": "secondary", "displayName": "Красный для текста", "canonical": "#b00c15", "tonalRamp": ["oklch(15% 0.2 27)", "oklch(27% 0.2 27)", "oklch(39% 0.2 27)", "oklch(51% 0.2 27)", "oklch(63% 0.2 27)", "oklch(75% 0.13 27)", "oklch(86% 0.07 27)", "oklch(95% 0.03 27)"] },
+      "danger-border": { "role": "secondary", "displayName": "Красная граница", "canonical": "#d33b36", "tonalRamp": ["oklch(15% 0.2 27)", "oklch(27% 0.2 27)", "oklch(39% 0.2 27)", "oklch(51% 0.2 27)", "oklch(63% 0.2 27)", "oklch(75% 0.13 27)", "oklch(86% 0.07 27)", "oklch(95% 0.03 27)"] },
+      "surface": { "role": "neutral", "displayName": "Белая поверхность", "canonical": "#ffffff", "tonalRamp": ["oklch(15% 0.015 255)", "oklch(27% 0.015 255)", "oklch(39% 0.015 255)", "oklch(51% 0.015 255)", "oklch(63% 0.015 255)", "oklch(75% 0.012 255)", "oklch(86% 0.008 255)", "oklch(95% 0.005 255)"] },
+      "surface-subtle": { "role": "neutral", "displayName": "Холодно-серая панель", "canonical": "#f4f7fa", "tonalRamp": ["oklch(15% 0.015 255)", "oklch(27% 0.015 255)", "oklch(39% 0.015 255)", "oklch(51% 0.015 255)", "oklch(63% 0.015 255)", "oklch(75% 0.012 255)", "oklch(86% 0.008 255)", "oklch(95% 0.005 255)"] },
+      "surface-hover": { "role": "neutral", "displayName": "Серый наведения", "canonical": "#ebeff4", "tonalRamp": ["oklch(15% 0.015 255)", "oklch(27% 0.015 255)", "oklch(39% 0.015 255)", "oklch(51% 0.015 255)", "oklch(63% 0.015 255)", "oklch(75% 0.012 255)", "oklch(86% 0.008 255)", "oklch(95% 0.005 255)"] },
+      "surface-active": { "role": "neutral", "displayName": "Серый нажатия", "canonical": "#e2e7ed", "tonalRamp": ["oklch(15% 0.015 255)", "oklch(27% 0.015 255)", "oklch(39% 0.015 255)", "oklch(51% 0.015 255)", "oklch(63% 0.015 255)", "oklch(75% 0.012 255)", "oklch(86% 0.008 255)", "oklch(95% 0.005 255)"] },
+      "border": { "role": "neutral", "displayName": "Волосяная граница", "canonical": "#dfe3e8", "tonalRamp": ["oklch(15% 0.015 255)", "oklch(27% 0.015 255)", "oklch(39% 0.015 255)", "oklch(51% 0.015 255)", "oklch(63% 0.015 255)", "oklch(75% 0.012 255)", "oklch(86% 0.008 255)", "oklch(95% 0.005 255)"] },
+      "border-strong": { "role": "neutral", "displayName": "Граница контрола", "canonical": "#818a95", "tonalRamp": ["oklch(15% 0.015 255)", "oklch(27% 0.015 255)", "oklch(39% 0.015 255)", "oklch(51% 0.015 255)", "oklch(63% 0.015 255)", "oklch(75% 0.012 255)", "oklch(86% 0.008 255)", "oklch(95% 0.005 255)"] },
+      "text": { "role": "neutral", "displayName": "Сланцевый текст", "canonical": "#151b24", "tonalRamp": ["oklch(15% 0.015 255)", "oklch(27% 0.015 255)", "oklch(39% 0.015 255)", "oklch(51% 0.015 255)", "oklch(63% 0.015 255)", "oklch(75% 0.012 255)", "oklch(86% 0.008 255)", "oklch(95% 0.005 255)"] },
+      "text-muted": { "role": "neutral", "displayName": "Приглушённый текст", "canonical": "#545b66", "tonalRamp": ["oklch(15% 0.015 255)", "oklch(27% 0.015 255)", "oklch(39% 0.015 255)", "oklch(51% 0.015 255)", "oklch(63% 0.015 255)", "oklch(75% 0.012 255)", "oklch(86% 0.008 255)", "oklch(95% 0.005 255)"] },
+      "text-disabled": { "role": "neutral", "displayName": "Отключённый текст", "canonical": "#81878f", "tonalRamp": ["oklch(15% 0.015 255)", "oklch(27% 0.015 255)", "oklch(39% 0.015 255)", "oklch(51% 0.015 255)", "oklch(63% 0.015 255)", "oklch(75% 0.012 255)", "oklch(86% 0.008 255)", "oklch(95% 0.005 255)"] }
+    },
+    "typographyMeta": {
+      "headline": { "displayName": "Headline", "purpose": "Заголовок страницы, один на экран, слева вверху." },
+      "title": { "displayName": "Title", "purpose": "Заголовок секции внутри страницы; тем же размером с трекингом -0.02em набран логотип-слово в боковой панели." },
+      "body": { "displayName": "Body", "purpose": "Значения в полях ввода; заголовок внутри панели состояния набран этим размером в насыщенности 600." },
+      "body-sm": { "displayName": "Body-sm", "purpose": "Описание под заголовком страницы, подсказки и ошибки полей, описание в панели состояния (не шире 28rem)." },
+      "label": { "displayName": "Label", "purpose": "Подписи полей, текст кнопок, пункты навигации." }
+    },
+    "shadows": [
+      { "name": "shadow-control", "value": "0 1px 2px rgb(21 27 36 / 0.08)", "purpose": "Кнопки и поля ввода в активном состоянии. Отключённые контролы теряют её." }
+    ],
+    "motion": [
+      { "name": "duration-fast", "value": "150ms", "purpose": "Смена цвета, фона и границы у кнопок, полей и пунктов навигации." },
+      { "name": "duration-base", "value": "180ms", "purpose": "Скольжение навигационной плашки между разделами." },
+      { "name": "ease-out", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Единая кривая для всех переходов состояния." }
+    ],
+    "breakpoints": []
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Основное действие раздела; одна на шапку страницы или на панель.",
+      "html": "<button class=\"ds-btn ds-btn-primary\" type=\"button\">Зберегти</button>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); height: var(--control-height); padding-inline: var(--space-4); border: 1px solid transparent; border-radius: var(--radius-control); box-shadow: var(--shadow-control); font-family: var(--font-sans); font-size: var(--font-size-sm); font-weight: var(--font-weight-medium); line-height: 1; white-space: nowrap; cursor: pointer; transition: background-color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out); } .ds-btn:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; } .ds-btn-primary { background: var(--color-accent); color: var(--color-on-accent); } .ds-btn-primary:hover { background: var(--color-accent-hover); } .ds-btn-primary:active { background: var(--color-accent-active); }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Вариант по умолчанию: отмена, повтор и прочие неосновные действия.",
+      "html": "<button class=\"ds-btn ds-btn-secondary\" type=\"button\">Скасувати</button>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); height: var(--control-height); padding-inline: var(--space-4); border: 1px solid transparent; border-radius: var(--radius-control); box-shadow: var(--shadow-control); font-family: var(--font-sans); font-size: var(--font-size-sm); font-weight: var(--font-weight-medium); line-height: 1; white-space: nowrap; cursor: pointer; transition: background-color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out); } .ds-btn:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; } .ds-btn-secondary { border-color: var(--color-border-strong); background: var(--color-surface); color: var(--color-text); } .ds-btn-secondary:hover { background: var(--color-surface-hover); } .ds-btn-secondary:active { background: var(--color-surface-active); }"
+    },
+    {
+      "name": "Danger Button",
+      "kind": "button",
+      "refersTo": "button-danger",
+      "description": "Только для разрушающих действий.",
+      "html": "<button class=\"ds-btn ds-btn-danger\" type=\"button\">Видалити</button>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); height: var(--control-height); padding-inline: var(--space-4); border: 1px solid transparent; border-radius: var(--radius-control); box-shadow: var(--shadow-control); font-family: var(--font-sans); font-size: var(--font-size-sm); font-weight: var(--font-weight-medium); line-height: 1; white-space: nowrap; cursor: pointer; transition: background-color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out); } .ds-btn:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; } .ds-btn-danger { background: var(--color-danger); color: var(--color-on-accent); } .ds-btn-danger:hover { background: var(--color-danger-hover); } .ds-btn-danger:active { background: var(--color-danger-active); }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Поле с подписью сверху и подсказкой снизу.",
+      "html": "<div class=\"ds-field\"><label class=\"ds-field-label\" for=\"ds-amount\">Сума</label><input class=\"ds-field-control\" id=\"ds-amount\" inputmode=\"decimal\" value=\"412,50\"><p class=\"ds-field-hint\">У гривнях, не більше двох знаків після коми</p></div>",
+      "css": ".ds-field { display: grid; align-content: start; gap: var(--space-2); max-width: 20rem; font-family: var(--font-sans); color: var(--color-text); } .ds-field-label { font-size: var(--font-size-sm); font-weight: var(--font-weight-medium); } .ds-field-control { width: 100%; height: var(--control-height); padding-inline: var(--space-3); border: 1px solid var(--color-border-strong); border-radius: var(--radius-control); background: var(--color-surface); box-shadow: var(--shadow-control); font: inherit; font-size: var(--font-size-md); font-variant-numeric: var(--numeric-figures); color: inherit; caret-color: var(--color-accent); transition: border-color var(--duration-fast) var(--ease-out); } .ds-field-control:hover { border-color: var(--color-text-muted); } .ds-field-control:focus-visible { border-color: var(--color-accent); outline: 2px solid var(--color-accent); outline-offset: 2px; } .ds-field-hint { margin: 0; font-size: var(--font-size-sm); color: var(--color-text-muted); }"
+    },
+    {
+      "name": "Text Field, Error",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Невалидное значение: красная граница и сообщение с иконкой вместо подсказки.",
+      "html": "<div class=\"ds-field\"><label class=\"ds-field-label\" for=\"ds-amount-error\">Сума</label><input class=\"ds-field-control ds-field-control-invalid\" id=\"ds-amount-error\" inputmode=\"decimal\" value=\"12,345\" aria-invalid=\"true\" aria-describedby=\"ds-amount-error-message\"><p class=\"ds-field-error\" id=\"ds-amount-error-message\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><line x1=\"12\" x2=\"12\" y1=\"8\" y2=\"12\"/><line x1=\"12\" x2=\"12.01\" y1=\"16\" y2=\"16\"/></svg>Вкажіть суму не більше ніж із двома знаками після коми.</p></div>",
+      "css": ".ds-field { display: grid; align-content: start; gap: var(--space-2); max-width: 28rem; font-family: var(--font-sans); color: var(--color-text); } .ds-field-label { font-size: var(--font-size-sm); font-weight: var(--font-weight-medium); } .ds-field-control { width: 100%; height: var(--control-height); padding-inline: var(--space-3); border: 1px solid var(--color-border-strong); border-radius: var(--radius-control); background: var(--color-surface); box-shadow: var(--shadow-control); font: inherit; font-size: var(--font-size-md); font-variant-numeric: var(--numeric-figures); color: inherit; caret-color: var(--color-accent); transition: border-color var(--duration-fast) var(--ease-out); } .ds-field-control-invalid, .ds-field-control-invalid:hover { border-color: var(--color-danger-border); } .ds-field-control:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; } .ds-field-error { display: flex; align-items: center; gap: var(--space-1); margin: 0; font-size: var(--font-size-sm); color: var(--color-danger-text); }"
+    },
+    {
+      "name": "Select",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Список в том же корпусе, что и поле, с шевроном справа.",
+      "html": "<div class=\"ds-field\"><label class=\"ds-field-label\" for=\"ds-category\">Категорія</label><span class=\"ds-select-wrap\"><select class=\"ds-field-control ds-select\" id=\"ds-category\"><option>Їжа</option><option>Комунальні послуги</option></select><svg class=\"ds-select-icon\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m6 9 6 6 6-6\"/></svg></span></div>",
+      "css": ".ds-field { display: grid; align-content: start; gap: var(--space-2); max-width: 20rem; font-family: var(--font-sans); color: var(--color-text); } .ds-field-label { font-size: var(--font-size-sm); font-weight: var(--font-weight-medium); } .ds-field-control { width: 100%; height: var(--control-height); padding-inline: var(--space-3); border: 1px solid var(--color-border-strong); border-radius: var(--radius-control); background: var(--color-surface); box-shadow: var(--shadow-control); font: inherit; font-size: var(--font-size-md); color: inherit; transition: border-color var(--duration-fast) var(--ease-out); } .ds-field-control:hover { border-color: var(--color-text-muted); } .ds-field-control:focus-visible { border-color: var(--color-accent); outline: 2px solid var(--color-accent); outline-offset: 2px; } .ds-select-wrap { position: relative; display: block; } .ds-select { padding-inline-end: var(--space-8); appearance: none; cursor: pointer; } .ds-select-icon { position: absolute; inset-block: 0; inset-inline-end: var(--space-3); margin-block: auto; color: var(--color-text-muted); pointer-events: none; }"
+    },
+    {
+      "name": "Sidebar Navigation",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Три раздела; текущий отмечен одной скользящей светло-синей плашкой.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Розділи\"><span class=\"ds-nav-pill\" aria-hidden=\"true\"></span><ul class=\"ds-nav-list\"><li><a class=\"ds-nav-link\" href=\"#\" aria-current=\"page\"><svg class=\"ds-nav-icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect width=\"7\" height=\"9\" x=\"3\" y=\"3\" rx=\"1\"/><rect width=\"7\" height=\"5\" x=\"14\" y=\"3\" rx=\"1\"/><rect width=\"7\" height=\"9\" x=\"14\" y=\"12\" rx=\"1\"/><rect width=\"7\" height=\"5\" x=\"3\" y=\"16\" rx=\"1\"/></svg>Огляд</a></li><li><a class=\"ds-nav-link\" href=\"#\"><svg class=\"ds-nav-icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z\"/><path d=\"M14 8H8\"/><path d=\"M16 12H8\"/><path d=\"M13 16H8\"/></svg>Витрати</a></li><li><a class=\"ds-nav-link\" href=\"#\"><svg class=\"ds-nav-icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m15 5 6.3 6.3a2.4 2.4 0 0 1 0 3.4L17 19\"/><path d=\"M9.586 5.586A2 2 0 0 0 8.172 5H3a1 1 0 0 0-1 1v5.172a2 2 0 0 0 .586 1.414L8.29 18.29a2.426 2.426 0 0 0 3.42 0l3.58-3.58a2.426 2.426 0 0 0 0-3.42z\"/><circle cx=\"6.5\" cy=\"9.5\" r=\".5\" fill=\"currentColor\"/></svg>Категорії</a></li></ul></nav>",
+      "css": ".ds-nav { --ds-nav-item-height: 2.25rem; --ds-nav-item-gap: var(--space-1); position: relative; width: 13.5rem; padding: var(--space-4); background: var(--color-surface-subtle); font-family: var(--font-sans); } .ds-nav-pill { position: absolute; inset-inline: var(--space-4); top: var(--space-4); height: var(--ds-nav-item-height); border-radius: var(--radius-control); background: var(--color-accent-subtle); transition: transform var(--duration-base) var(--ease-out); pointer-events: none; } .ds-nav-list { display: grid; gap: var(--ds-nav-item-gap); margin: 0; padding: 0; list-style: none; } .ds-nav-link { position: relative; display: flex; align-items: center; gap: var(--space-2); height: var(--ds-nav-item-height); padding-inline: var(--space-3); border-radius: var(--radius-control); color: var(--color-text-muted); font-size: var(--font-size-sm); font-weight: var(--font-weight-medium); text-decoration: none; transition: color var(--duration-fast) var(--ease-out), background-color var(--duration-fast) var(--ease-out); } .ds-nav-icon { flex: none; width: 1.5rem; height: 1.125rem; } .ds-nav-link:hover { background: var(--color-surface-hover); color: var(--color-text); } .ds-nav-link:focus-visible { outline: 2px solid var(--color-accent); outline-offset: -2px; } .ds-nav-link[aria-current='page'], .ds-nav-link[aria-current='page']:hover { background: transparent; color: var(--color-accent-text); }"
+    },
+    {
+      "name": "Empty State Panel",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "Плоская панель с волосяной границей: иконка, заголовок, описание и основное действие.",
+      "html": "<div class=\"ds-panel\"><svg class=\"ds-panel-icon\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><polyline points=\"22 12 16 12 14 15 10 15 8 12 2 12\"/><path d=\"M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z\"/></svg><h2 class=\"ds-panel-title\">Витрат за цей місяць ще немає</h2><p class=\"ds-panel-description\">Додайте першу витрату, і вона з’явиться в цьому списку.</p><div class=\"ds-panel-action\"><button class=\"ds-panel-btn\" type=\"button\">Додати витрату</button></div></div>",
+      "css": ".ds-panel { display: grid; justify-items: center; padding: var(--space-12) var(--space-6); border: 1px solid var(--color-border); border-radius: var(--radius-panel); background: var(--color-surface); font-family: var(--font-sans); color: var(--color-text); text-align: center; } .ds-panel-icon { color: var(--color-text-muted); } .ds-panel-title { margin: var(--space-4) 0 0; font-size: var(--font-size-md); font-weight: var(--font-weight-semibold); line-height: var(--line-height-tight); } .ds-panel-description { max-width: 28rem; margin: var(--space-1) 0 0; color: var(--color-text-muted); font-size: var(--font-size-sm); } .ds-panel-action { margin-top: var(--space-6); } .ds-panel-btn { height: var(--control-height); padding-inline: var(--space-4); border: 1px solid transparent; border-radius: var(--radius-control); background: var(--color-accent); box-shadow: var(--shadow-control); color: var(--color-on-accent); font-family: inherit; font-size: var(--font-size-sm); font-weight: var(--font-weight-medium); cursor: pointer; transition: background-color var(--duration-fast) var(--ease-out); } .ds-panel-btn:hover { background: var(--color-accent-hover); } .ds-panel-btn:active { background: var(--color-accent-active); } .ds-panel-btn:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }"
+    },
+    {
+      "name": "Loading Skeleton",
+      "kind": "custom",
+      "refersTo": "panel",
+      "description": "Состояние загрузки: три полосы разной ширины с мерцанием между двумя серыми тонами.",
+      "html": "<div class=\"ds-loading\" role=\"status\" aria-label=\"Завантаження…\"><span class=\"ds-skeleton\" style=\"width: 62%\"></span><span class=\"ds-skeleton\" style=\"width: 84%\"></span><span class=\"ds-skeleton\" style=\"width: 46%\"></span></div>",
+      "css": ".ds-loading { display: grid; gap: var(--space-4); padding: var(--space-6); border: 1px solid var(--color-border); border-radius: var(--radius-panel); background: var(--color-surface); } .ds-skeleton { height: 0.875rem; border-radius: var(--radius-control); background: linear-gradient(90deg, var(--color-surface-hover) 25%, var(--color-surface-subtle) 50%, var(--color-surface-hover) 75%); background-size: 200% 100%; animation: ds-shimmer 1.4s linear infinite; } @keyframes ds-shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } } @media (prefers-reduced-motion: reduce) { .ds-skeleton { animation: none; } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Спокойный кабинет",
+    "overview": "Finstat выглядит как стандарт своей категории, сыгранный без отступлений: спокойный финтех-кабинет, качество которого живёт в точности, а не в украшениях. Белая рабочая поверхность, холодно-серая боковая панель, почти чёрный сланцевый текст и один уверенный синий. Ориентиры по уровню исполнения — Stripe Dashboard, Wise, Linear. Название North Star дано документирующим проходом и владельцем не подтверждено.\n\nПлотность умеренная: контролы высотой 2.5rem, шаги отступов кратны 0.25rem, содержимое идёт одной колонкой шириной до 60rem. Глубины почти нет: поверхности плоские, разделение держится на волосяных границах и двух тонах серого. Движение отмечает только смену состояния; единственный запоминающийся жест — одна навигационная плашка, скользящая между разделами.\n\nСистему связывают постоянные ограничения продукта: интерфейс на украинском, только светлая тема, только компьютер (минимальная ширина страницы 60rem), деньги в интерфейсе форматируются, но не считаются. Открытый вопрос, не решённый этой записью: владелец просил избегать безликого шаблонного оформления, и принимает ли он стандарт категории, ещё не подтверждено.",
+    "keyCharacteristics": [
+      "Один синий на весь интерфейс: основное действие, текущий раздел, фокус и ссылки.",
+      "Плоские поверхности, волосяные границы 1px, одна едва заметная тень только у контролов.",
+      "Два радиуса: 6px для контролов, 10px для панелей.",
+      "Inter во всех ролях, три насыщенности, табличные цифры в полях ввода.",
+      "Один набор штриховых иконок (Lucide), всегда рядом с подписью или сообщением.",
+      "Движение 150–180ms на смену состояния, мгновенно при `prefers-reduced-motion`."
+    ],
+    "rules": [
+      { "name": "The One Blue Rule", "body": "Синий закреплён за основным действием, текущим разделом, фокусом и ссылками. Он не красит заголовки, иконки-украшения и фоны секций.", "section": "colors" },
+      { "name": "The Two Borders Rule", "body": "Волосяная граница (`border`) очерчивает поверхности, тёмная (`border-strong`) — интерактивные контролы. Роли не меняются местами.", "section": "colors" },
+      { "name": "The Red Means Loss Rule", "body": "Красный появляется только там, где действие что-то уничтожает или значение не принято. Он не используется для акцентов и статистики.", "section": "colors" },
+      { "name": "The Tabular Money Rule", "body": "Поля ввода используют табличные цифры (`tabular-nums`), чтобы суммы не «прыгали» при вводе. Деньги в интерфейсе только форматируются (`uk-UA`), никогда не считаются; итоги приходят с сервера.", "section": "typography" },
+      { "name": "The Four Sizes Rule", "body": "В системе четыре размера: 0.875rem, 1rem, 1.25rem, 1.5rem. Заголовки балансируются (`text-wrap: balance`) и идут в насыщенности 600 с интерлиньяжем 1.25.", "section": "typography" },
+      { "name": "The Control-Only Shadow Rule", "body": "Единственная тень в системе принадлежит интерактивному контролу и говорит «это можно нажать». Поверхности и панели остаются плоскими.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do брать все значения из токенов `frontend/src/styles/tokens.css`: цвета, отступы, два радиуса, высоту контрола 2.5rem.",
+      "Do оставлять одну основную кнопку на шапку страницы, справа вверху.",
+      "Do давать каждому экрану состояния загрузки, пустоты и ошибки из готовых компонентов.",
+      "Do связывать поле с подписью и сообщением; ошибку показывать границей, текстом и иконкой одновременно, а не одним цветом.",
+      "Do сохранять видимое кольцо фокуса (2px, `accent`) на каждом интерактивном элементе.",
+      "Do ограничивать движение сменой состояния: 150ms для цвета и границы, 180ms для плашки навигации.",
+      "Do писать тексты интерфейса на украинском и выводить суммы табличными цифрами."
+    ],
+    "donts": [
+      "Don't вводить второй акцентный цвет и не красить синим то, что не является действием, текущим разделом, фокусом или ссылкой.",
+      "Don't добавлять тени панелям и поверхностям; тень есть только у контролов.",
+      "Don't использовать градиенты как украшение; единственный градиент системы — мерцание скелетона между двумя серыми тонами.",
+      "Don't помещать иконки в цветные плитки и не смешивать наборы иконок.",
+      "Don't вводить третий радиус, тёмную тему или мобильную раскладку.",
+      "Don't считать деньги в интерфейсе: суммы только форматируются."
+    ]
+  }
+}

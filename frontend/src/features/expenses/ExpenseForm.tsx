@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import type { Category } from '../../api/categories.ts'
 import type { Expense, ExpenseInput } from '../../api/expenses.ts'
-import { errorMessage } from '../../api/useResource.ts'
+import { errorMessage } from '../../api/client.ts'
 import { todayIso } from '../../shared/dates.ts'
 import { amountToInput, parseAmount } from '../../shared/money.ts'
 import { Button } from '../../ui/Button.tsx'
@@ -75,7 +75,7 @@ export function ExpenseForm({ categories, expense, submitLabel, onSubmit, onCanc
       className={styles.form}
       onSubmit={submit}
       onKeyDown={(event) => {
-        if (event.key === 'Escape') onCancel?.()
+        if (event.key === 'Escape' && !saving) onCancel?.()
       }}
       noValidate
     >
@@ -136,7 +136,11 @@ export function ExpenseForm({ categories, expense, submitLabel, onSubmit, onCanc
         <Button type="submit" variant="primary" loading={saving}>
           {submitLabel}
         </Button>
-        {onCancel && <Button onClick={onCancel}>Скасувати</Button>}
+        {onCancel && (
+          <Button onClick={onCancel} disabled={saving}>
+            Скасувати
+          </Button>
+        )}
       </div>
       {errors.form && (
         <p className={styles.formError} role="alert">

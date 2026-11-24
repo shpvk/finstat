@@ -1,7 +1,8 @@
 import { Pencil, Trash2 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { Link } from 'react-router'
 import { listCategories, type Category } from '../../api/categories.ts'
+import { errorMessage } from '../../api/client.ts'
 import {
   createExpense,
   deleteExpense,
@@ -10,7 +11,7 @@ import {
   type Expense,
   type ExpenseInput,
 } from '../../api/expenses.ts'
-import { errorMessage, useResource } from '../../api/useResource.ts'
+import { useResource } from '../../api/useResource.ts'
 import { formatDay, formatMonth, formatWeekday, monthOf } from '../../shared/dates.ts'
 import { formatMoney } from '../../shared/money.ts'
 import { useMonth } from '../../shared/monthContext.ts'
@@ -42,6 +43,7 @@ export function ExpensesPage() {
   const categories = useResource('categories', (signal) => listCategories(true, signal))
   const expenses = useResource(`expenses:${month}`, (signal) => listExpenses(month, signal))
   const [selected, setSelected] = useState<{ id: string; action: RowAction } | null>(null)
+  const listHeading = useRef<HTMLHeadingElement>(null)
 
   const categoryList = categories.data ?? []
   const hasActive = categoryList.some((category) => !category.isArchived)
@@ -57,6 +59,21 @@ export function ExpensesPage() {
       toast(`Витрату додано в ${formatMonth(expenseMonth).toLowerCase()}`)
       setMonth(expenseMonth)
     }
+  }
+
+  function updated(expense: Expense) {
+    expenses.mutate((list) =>
+      monthOf(expense.date) === month
+        ? list.map((item) => (item.id === expense.id ? expense : item))
+        : list.filter((item) => item.id !== expense.id),
+    )
+    expenses.reload()
+  }
+
+  function deleted(id: string) {
+    expenses.mutate((list) => list.filter((item) => item.id !== id))
+    expenses.reload()
+    listHeading.current?.focus()
   }
 
   return (
@@ -81,20 +98,21 @@ export function ExpensesPage() {
 
       <section aria-labelledby="month-expenses">
         <div className={styles.toolbar}>
-          <h2 id="month-expenses" className="visually-hidden">
+          <h2 id="month-expenses" ref={listHeading} tabIndex={-1} className="visually-hidden">
             Витрати за {formatMonth(month).toLowerCase()}
           </h2>
           <MonthSwitcher />
-          {expenses.data && !expenses.loading && (
+          {expenses.data && expenses.data.length > 0 && (
             <span className={styles.count}>{countLabel(expenses.data.length)}</span>
           )}
         </div>
         {expenses.error ? (
           <ErrorState message={expenses.error} onRetry={expenses.reload} />
-        ) : !expenses.data || (expenses.loading && expenses.data.length === 0) ? (
+        ) : !expenses.data ? (
           <LoadingState />
         ) : expenses.data.length === 0 ? (
           <EmptyState
+            level={3}
             title="Витрат за цей місяць немає"
             description="Додайте витрату у формі вище, і вона з’явиться в цьому списку."
           />
@@ -121,10 +139,12 @@ export function ExpensesPage() {
                   categories={categoryList}
                   category={categoryById.get(expense.categoryId)}
                   action={selected?.id === expense.id ? selected.action : null}
-                  onActionChange={(action) =>
-                    setSelected(action ? { id: expense.id, action } : null)
+                  onOpen={(action) => setSelected({ id: expense.id, action })}
+                  onClose={() =>
+                    setSelected((current) => (current?.id === expense.id ? null : current))
                   }
-                  onChanged={expenses.reload}
+                  onUpdated={updated}
+                  onDeleted={deleted}
                 />
               ))}
             </tbody>
@@ -140,8 +160,10 @@ interface ExpenseRowProps {
   categories: Category[]
   category: Category | undefined
   action: RowAction | null
-  onActionChange: (action: RowAction | null) => void
-  onChanged: () => void
+  onOpen: (action: RowAction) => void
+  onClose: () => void
+  onUpdated: (expense: Expense) => void
+  onDeleted: (id: string) => void
 }
 
 function ExpenseRow({
@@ -149,12 +171,29 @@ function ExpenseRow({
   categories,
   category,
   action,
-  onActionChange,
-  onChanged,
+  onOpen,
+  onClose,
+  onUpdated,
+  onDeleted,
 }: ExpenseRowProps) {
   const toast = useToast()
-  const close = () => onActionChange(null)
+  const editButton = useRef<HTMLButtonElement>(null)
+  const deleteButton = useRef<HTMLButtonElement>(null)
+  const opened = useRef<RowAction | null>(null)
   const amount = formatMoney(expense.amount)
+  const day = formatDay(expense.date)
+
+  useEffect(() => {
+    if (action) {
+      opened.current = action
+      return
+    }
+    if (opened.current) {
+      const opener = opened.current === 'edit' ? editButton : deleteButton
+      opener.current?.focus()
+      opened.current = null
+    }
+  }, [action])
 
   if (action === 'edit') {
     return (
@@ -164,12 +203,13 @@ function ExpenseRow({
             categories={categories}
             expense={expense}
             submitLabel="Зберегти"
-            onCancel={close}
+            onCancel={onClose}
             onSubmit={async (input) => {
-              await updateExpense(expense.id, input)
+              const saved = await updateExpense(expense.id, input)
               toast('Зміни збережено')
-              close()
-              onChanged()
+              if (monthOf(saved.date) !== monthOf(expense.date)) opened.current = null
+              onClose()
+              onUpdated(saved)
             }}
           />
         </td>
@@ -181,7 +221,16 @@ function ExpenseRow({
     return (
       <tr className={styles.expanded}>
         <td colSpan={5}>
-          <DeleteConfirm expense={expense} amount={amount} onDone={close} onChanged={onChanged} />
+          <DeleteConfirm
+            expense={expense}
+            label={`${amount} від ${day}`}
+            onCancel={onClose}
+            onDeleted={() => {
+              opened.current = null
+              onClose()
+              onDeleted(expense.id)
+            }}
+          />
         </td>
       </tr>
     )
@@ -190,7 +239,7 @@ function ExpenseRow({
   return (
     <tr>
       <td className={styles.date}>
-        {formatDay(expense.date)}
+        {day}
         <span className={styles.weekday}>{formatWeekday(expense.date)}</span>
       </td>
       <td>
@@ -201,16 +250,18 @@ function ExpenseRow({
       <td className={styles.amount}>{amount}</td>
       <td className={styles.actions}>
         <Button
+          ref={editButton}
           variant="ghost"
-          aria-label={`Редагувати витрату ${amount} від ${formatDay(expense.date)}`}
-          onClick={() => onActionChange('edit')}
+          aria-label={`Редагувати витрату ${amount} від ${day}`}
+          onClick={() => onOpen('edit')}
         >
           <Pencil size={16} aria-hidden="true" />
         </Button>
         <Button
+          ref={deleteButton}
           variant="ghost"
-          aria-label={`Видалити витрату ${amount} від ${formatDay(expense.date)}`}
-          onClick={() => onActionChange('delete')}
+          aria-label={`Видалити витрату ${amount} від ${day}`}
+          onClick={() => onOpen('delete')}
         >
           <Trash2 size={16} aria-hidden="true" />
         </Button>
@@ -221,23 +272,23 @@ function ExpenseRow({
 
 interface DeleteConfirmProps {
   expense: Expense
-  amount: string
-  onDone: () => void
-  onChanged: () => void
+  label: string
+  onCancel: () => void
+  onDeleted: () => void
 }
 
-function DeleteConfirm({ expense, amount, onDone, onChanged }: DeleteConfirmProps) {
+function DeleteConfirm({ expense, label, onCancel, onDeleted }: DeleteConfirmProps) {
   const toast = useToast()
   const [error, setError] = useState<string>()
   const [saving, setSaving] = useState(false)
+  const noteId = useId()
 
   async function confirm() {
     setSaving(true)
     try {
       await deleteExpense(expense.id)
       toast('Витрату видалено')
-      onDone()
-      onChanged()
+      onDeleted()
     } catch (failure) {
       setError(errorMessage(failure))
       setSaving(false)
@@ -249,22 +300,28 @@ function DeleteConfirm({ expense, amount, onDone, onChanged }: DeleteConfirmProp
       className={styles.confirm}
       role="group"
       aria-label="Видалення витрати"
+      aria-describedby={noteId}
       onKeyDown={(event) => {
-        if (event.key === 'Escape') onDone()
+        if (event.key === 'Escape' && !saving) onCancel()
       }}
     >
       <div className={styles.grow}>
-        <p className={styles.confirmTitle}>
-          Видалити витрату {amount} від {formatDay(expense.date)}?
+        <p className={styles.confirmTitle}>Видалити витрату {label}?</p>
+        <p id={noteId} className={styles.note}>
+          Її буде прибрано з історії та статистики.
         </p>
-        <p className={error ? styles.error : styles.note} role={error ? 'alert' : undefined}>
-          {error ?? 'Її буде прибрано з історії та статистики.'}
-        </p>
+        {error && (
+          <p className={styles.error} role="alert">
+            {error}
+          </p>
+        )}
       </div>
-      <Button variant="danger" loading={saving} onClick={confirm} autoFocus>
+      <Button variant="danger" loading={saving} onClick={confirm}>
         Видалити
       </Button>
-      <Button onClick={onDone}>Скасувати</Button>
+      <Button onClick={onCancel} disabled={saving} autoFocus>
+        Скасувати
+      </Button>
     </div>
   )
 }

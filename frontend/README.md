@@ -14,6 +14,14 @@ React, TypeScript (strict) и Vite. Нужен Node.js 22 (от 22.13) или 24
 | `npm run lint` | Линтер (oxlint) |
 | `npm test` | Тесты (Vitest + React Testing Library) |
 | `npm run build` | Проверка типов и сборка в `dist/` |
+| `npm run test:e2e` | Сквозной браузерный тест (Playwright) против запущенного `docker compose up` |
+
+### Сквозной тест
+
+`e2e/expense-flow.spec.ts` добавляет расход через интерфейс, проверяет, что итог месяца и таблица категорий на «Огляді» обновились, перезапускает контейнеры `db` и `api` (`docker compose restart db api`) и убеждается, что расход сохранился. В конце расход удаляется, так что данные в базе не меняются. Нужны запущенный стек Compose и хотя бы одна активная категория.
+
+- Адрес приложения — `E2E_BASE_URL`, по умолчанию http://localhost:3000.
+- Браузер — установленный Google Chrome (`E2E_BROWSER_CHANNEL`, по умолчанию `chrome`). Без Chrome: `npx playwright install chromium` и `E2E_BROWSER_CHANNEL=chromium`.
 
 ## Структура
 

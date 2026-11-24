@@ -1,6 +1,6 @@
 import react from '@vitejs/plugin-react'
 import { loadEnv } from 'vite'
-import { defineConfig } from 'vitest/config'
+import { configDefaults, defineConfig } from 'vitest/config'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
@@ -16,6 +16,7 @@ export default defineConfig(({ mode }) => {
       environment: 'jsdom',
       env: { TZ: 'Europe/Kyiv' },
       setupFiles: './src/test/setup.ts',
+      exclude: [...configDefaults.exclude, 'e2e/**'],
     },
   }
 })

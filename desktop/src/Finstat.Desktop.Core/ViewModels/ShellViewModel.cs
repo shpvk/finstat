@@ -60,9 +60,9 @@ public class ShellViewModel : ViewModelBase
         var target = Enum.Parse<Section>(name, true);
         Section = target;
         if (target == Section.Overview)
-            await Overview.LoadAsync();
+            await Overview.RefreshAsync();
         else if (target == Section.Expenses)
-            await Expenses.LoadAsync();
+            await Expenses.RefreshAsync();
         else
             await Categories.LoadAsync();
     }

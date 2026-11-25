@@ -61,7 +61,8 @@
                                 <BoxView Style="{StaticResource Divider}" IsVisible="{Binding ShowDivider}" />
 
                                 <Grid ColumnDefinitions="*,Auto" Padding="16,8,8,8" MinimumHeightRequest="56" IsVisible="{Binding IsIdle}">
-                                    <Label Text="{Binding Name}" VerticalOptions="Center" />
+<Grid.Behaviors><controls:RevealBehavior /></Grid.Behaviors>
+                                    <Label Text="{Binding Name}" VerticalOptions="Center" LineBreakMode="TailTruncation" ToolTipProperties.Text="{Binding Name}" Margin="0,0,16,0" />
                                     <HorizontalStackLayout Grid.Column="1" Spacing="8">
                                         <Button
                                             Text="Перейменувати"
@@ -79,6 +80,7 @@
                                 </Grid>
 
                                 <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8" Padding="16,8,8,8" IsVisible="{Binding IsEditing}">
+<Grid.Behaviors><controls:RevealBehavior /></Grid.Behaviors>
                                     <VerticalStackLayout>
                                         <controls:InputFrame HasError="{Binding Error, Converter={StaticResource HasText}}">
                                             <Entry
@@ -105,10 +107,13 @@
                                 </Grid>
 
                                 <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8" Padding="16,8,8,8" IsVisible="{Binding IsConfirmingArchive}">
+<Grid.Behaviors><controls:RevealBehavior /></Grid.Behaviors>
                                     <VerticalStackLayout VerticalOptions="Center">
                                         <Label Text="{Binding ArchiveQuestion}" FontFamily="InterMedium" />
                                         <Label Text="Нові витрати в ній додати не вийде. Відновлення з архіву не передбачено." Style="{StaticResource Muted}" />
-                                        <Label Text="{Binding Error}" Style="{StaticResource ErrorText}" IsVisible="{Binding Error, Converter={StaticResource HasText}}" />
+                                        <Label Text="{Binding Error}" Style="{StaticResource ErrorText}" IsVisible="{Binding Error, Converter={StaticResource HasText}}">
+<Label.Behaviors><controls:RevealBehavior /></Label.Behaviors>
+</Label>
                                     </VerticalStackLayout>
                                     <Button
                                         Grid.Column="1"
@@ -144,7 +149,7 @@
                                 <VerticalStackLayout>
                                     <BoxView Style="{StaticResource Divider}" IsVisible="{Binding ShowDivider}" />
                                     <Grid ColumnDefinitions="*,Auto" Padding="16,8" MinimumHeightRequest="56">
-                                        <Label Text="{Binding Name}" TextColor="{StaticResource ColorTextMuted}" VerticalOptions="Center" />
+                                        <Label Text="{Binding Name}" TextColor="{StaticResource ColorTextMuted}" VerticalOptions="Center" LineBreakMode="TailTruncation" ToolTipProperties.Text="{Binding Name}" Margin="0,0,16,0" />
                                         <Border Grid.Column="1" Style="{StaticResource Badge}">
                                             <Label Text="В архіві" Style="{StaticResource BadgeText}" />
                                         </Border>

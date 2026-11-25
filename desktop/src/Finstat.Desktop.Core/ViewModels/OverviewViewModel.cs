@@ -10,6 +10,7 @@ public class OverviewViewModel : ViewModelBase
 {
     private readonly FinstatApiClient api;
     private LoadState state = LoadState.Loading;
+    private int loadVersion;
     private string errorMessage = "";
     private string totalText = "";
     private string categoriesCountText = "";
@@ -161,22 +162,34 @@ public class OverviewViewModel : ViewModelBase
         }
     }
 
-    public async Task LoadAsync()
+    public Task LoadAsync()
     {
-        State = LoadState.Loading;
+        return LoadAsync(false);
+    }
+
+    public Task RefreshAsync()
+    {
+        return LoadAsync(true);
+    }
+
+    private async Task LoadAsync(bool keepContent)
+    {
+        var version = ++loadVersion;
+        if (!keepContent || state != LoadState.Ready)
+            State = LoadState.Loading;
         OnPropertyChanged(nameof(TotalLabel));
         OnPropertyChanged(nameof(EmptyTitle));
         var requestedMonth = Month.ApiMonth;
         try
         {
             var statistics = await api.GetStatisticsAsync(requestedMonth, CancellationToken.None);
-            if (requestedMonth != Month.ApiMonth)
+            if (requestedMonth != Month.ApiMonth || version != loadVersion)
                 return;
             Apply(statistics);
         }
         catch (ApiException exception)
         {
-            if (requestedMonth != Month.ApiMonth)
+            if (requestedMonth != Month.ApiMonth || version != loadVersion)
                 return;
             ErrorMessage = exception.Message;
             State = LoadState.Error;

@@ -1,3 +1,4 @@
+using Finstat.Desktop.Core.Api;
 using Finstat.Desktop.Core.ViewModels;
 
 namespace Finstat.Desktop.Tests;
@@ -44,6 +45,93 @@ public class ExpenseFlowTests
         Assert.Equal("100,0%", overview.TopCategoryShare);
         Assert.Equal("21 листопада · Сільпо", overview.Recent[0].MetaText);
         Assert.Single(overview.Segments);
+    }
+
+    [Fact]
+    public async Task Returning_to_a_loaded_section_refreshes_it_without_blanking()
+    {
+        var backend = new FakeBackend();
+        var client = backend.CreateClient();
+        var month = new MonthState(() => Today);
+        var notifications = new NotificationCenter();
+        var overview = new OverviewViewModel(client, month);
+        var expenses = new ExpensesViewModel(client, month, notifications);
+        var shell = new ShellViewModel(overview, expenses, new CategoriesViewModel(client, notifications), notifications);
+        await expenses.LoadAsync();
+        await AddExpense(expenses, "10");
+        await overview.LoadAsync();
+        Assert.True(overview.IsReady);
+        Assert.True(expenses.IsReady);
+
+        var watching = false;
+        var blanked = false;
+        overview.PropertyChanged += (_, _) => blanked |= watching && overview.IsLoading;
+        expenses.PropertyChanged += (_, _) => blanked |= watching && expenses.IsLoading;
+        watching = true;
+        await shell.NavigateAsync("Expenses");
+        watching = false;
+        await AddExpense(expenses, "15");
+        watching = true;
+        await shell.NavigateAsync("Overview");
+        await shell.NavigateAsync("Expenses");
+        watching = false;
+
+        Assert.False(blanked);
+        Assert.True(overview.IsReady);
+        Assert.Equal("25,00 грн", Normalize(overview.TotalText));
+        Assert.Equal(2, expenses.Rows.Count);
+    }
+
+    [Fact]
+    public async Task A_stale_refresh_does_not_overwrite_newer_data()
+    {
+        var backend = new FakeBackend();
+        var gate = new GateHandler(backend.Api);
+        var client = new FinstatApiClient(new HttpClient(gate) { BaseAddress = new Uri("http://localhost:8080/") });
+        var expenses = new ExpensesViewModel(client, new MonthState(() => Today), new NotificationCenter());
+        await expenses.LoadAsync();
+        await AddExpense(expenses, "10");
+        Assert.Single(expenses.Rows);
+
+        gate.Armed = true;
+        var stale = expenses.RefreshAsync();
+        await gate.Reached.Task;
+        await AddExpense(expenses, "15");
+        Assert.Equal(2, expenses.Rows.Count);
+        gate.Release.SetResult();
+        await stale;
+
+        Assert.Equal(2, expenses.Rows.Count);
+        Assert.True(expenses.IsReady);
+    }
+
+    private static async Task AddExpense(ExpensesViewModel expenses, string amount)
+    {
+        expenses.Form.AmountText = amount;
+        expenses.Form.SelectedCategory = expenses.Form.Options[0];
+        expenses.Form.Date = new DateTime(2026, 11, 21);
+        await expenses.Form.SubmitCommand.ExecuteAsync();
+    }
+
+    private sealed class GateHandler(HttpMessageHandler inner) : DelegatingHandler(inner)
+    {
+        public bool Armed { get; set; }
+
+        public TaskCompletionSource Reached { get; } = new();
+
+        public TaskCompletionSource Release { get; } = new();
+
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            var response = await base.SendAsync(request, cancellationToken);
+            if (Armed && request.Method == HttpMethod.Get && request.RequestUri!.AbsolutePath == "/api/expenses")
+            {
+                Armed = false;
+                Reached.SetResult();
+                await Release.Task;
+            }
+            return response;
+        }
     }
 
     [Fact]

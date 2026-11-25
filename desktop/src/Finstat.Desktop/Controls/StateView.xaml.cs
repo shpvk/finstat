@@ -28,6 +28,7 @@ public partial class StateView : ContentView
     public StateView()
     {
         InitializeComponent();
+        Behaviors.Add(new RevealBehavior());
         ApplyActionStyle();
     }
 

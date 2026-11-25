@@ -40,6 +40,7 @@
                     RowDefinitions="Auto,Auto"
                     ColumnSpacing="12"
                     RowSpacing="16">
+<Grid.Behaviors><controls:RevealBehavior /></Grid.Behaviors>
 
                     <VerticalStackLayout>
                         <Label Text="Сума, грн" Style="{StaticResource FieldLabel}" />
@@ -88,7 +89,9 @@
                     </HorizontalStackLayout>
                 </Grid>
 
-                <Label Text="{Binding FormError}" Style="{StaticResource ErrorText}" Margin="0,16,0,0" IsVisible="{Binding FormError, Converter={StaticResource HasText}}" />
+                <Label Text="{Binding FormError}" Style="{StaticResource ErrorText}" Margin="0,16,0,0" IsVisible="{Binding FormError, Converter={StaticResource HasText}}">
+<Label.Behaviors><controls:RevealBehavior /></Label.Behaviors>
+</Label>
             </VerticalStackLayout>
         </Border>
 
@@ -114,7 +117,7 @@
 
         <Border Style="{StaticResource ListPanel}" IsVisible="{Binding IsReady}">
             <VerticalStackLayout>
-                <Grid ColumnDefinitions="223,252,*,120,133" Padding="16,12">
+                <Grid ColumnDefinitions="150,2*,3*,110,112" Padding="16,12">
                     <Label Text="Дата" Style="{StaticResource CardLabel}" />
                     <Label Grid.Column="1" Text="Категорія" Style="{StaticResource CardLabel}" />
                     <Label Grid.Column="2" Text="Коментар" Style="{StaticResource CardLabel}" />
@@ -127,17 +130,18 @@
                             <VerticalStackLayout>
                                 <BoxView Style="{StaticResource Divider}" IsVisible="{Binding ShowDivider}" />
 
-                                <Grid ColumnDefinitions="223,252,*,120,133" Padding="16,8" MinimumHeightRequest="56" IsVisible="{Binding IsIdle}">
+                                <Grid ColumnDefinitions="150,2*,3*,110,112" Padding="16,8" MinimumHeightRequest="56" IsVisible="{Binding IsIdle}">
+<Grid.Behaviors><controls:RevealBehavior /></Grid.Behaviors>
                                     <HorizontalStackLayout Spacing="4" VerticalOptions="Center">
                                         <Label Text="{Binding DayText}" FontSize="14" />
                                         <Label Text="{Binding WeekdayText}" Style="{StaticResource Muted}" />
                                     </HorizontalStackLayout>
-                                    <HorizontalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
-                                        <Label Text="{Binding CategoryName}" FontSize="14" VerticalOptions="Center" />
-                                        <Border Style="{StaticResource Badge}" IsVisible="{Binding IsArchivedCategory}">
+                                    <Grid Grid.Column="1" ColumnDefinitions="*,Auto" ColumnSpacing="4" VerticalOptions="Center" Margin="0,0,8,0">
+                                        <Label Text="{Binding CategoryName}" FontSize="14" VerticalOptions="Center" LineBreakMode="TailTruncation" ToolTipProperties.Text="{Binding CategoryName}" />
+                                        <Border Grid.Column="1" Style="{StaticResource Badge}" IsVisible="{Binding IsArchivedCategory}">
                                             <Label Text="в архіві" Style="{StaticResource BadgeText}" />
                                         </Border>
-                                    </HorizontalStackLayout>
+                                    </Grid>
                                     <Label Grid.Column="2" Text="{Binding CommentText}" Style="{StaticResource Muted}" VerticalOptions="Center" LineBreakMode="TailTruncation" />
                                     <Label Grid.Column="3" Text="{Binding AmountText}" Style="{StaticResource Amount}" VerticalOptions="Center" />
                                     <HorizontalStackLayout Grid.Column="4" Spacing="4" HorizontalOptions="End" VerticalOptions="Center">
@@ -167,10 +171,13 @@
                                 </Grid>
 
                                 <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8" Padding="16" BackgroundColor="{StaticResource ColorSurfaceSubtle}" IsVisible="{Binding IsConfirmingDelete}">
+<Grid.Behaviors><controls:RevealBehavior /></Grid.Behaviors>
                                     <VerticalStackLayout VerticalOptions="Center">
                                         <Label Text="{Binding ConfirmText}" FontFamily="InterMedium" />
                                         <Label Text="Її буде прибрано з історії та статистики." Style="{StaticResource Muted}" />
-                                        <Label Text="{Binding DeleteError}" Style="{StaticResource ErrorText}" IsVisible="{Binding DeleteError, Converter={StaticResource HasText}}" />
+                                        <Label Text="{Binding DeleteError}" Style="{StaticResource ErrorText}" IsVisible="{Binding DeleteError, Converter={StaticResource HasText}}">
+<Label.Behaviors><controls:RevealBehavior /></Label.Behaviors>
+</Label>
                                     </VerticalStackLayout>
                                     <Button
                                         Grid.Column="1"

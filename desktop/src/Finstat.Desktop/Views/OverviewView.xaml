@@ -36,6 +36,9 @@
             ActionCommand="{Binding OpenExpensesCommand}" />
 
         <VerticalStackLayout IsVisible="{Binding IsReady}" Spacing="24">
+            <VerticalStackLayout.Behaviors>
+                <controls:RevealBehavior />
+            </VerticalStackLayout.Behaviors>
 
             <Grid ColumnDefinitions="10*,13*" ColumnSpacing="24">
                 <Border Style="{StaticResource Panel}">
@@ -76,7 +79,7 @@
                                         <BoxView Style="{StaticResource Divider}" IsVisible="{Binding ShowDivider}" />
                                         <Grid ColumnDefinitions="*,Auto" Padding="0,12" ColumnSpacing="16">
                                             <VerticalStackLayout>
-                                                <Label Text="{Binding CategoryName}" FontFamily="InterMedium" />
+                                                <Label Text="{Binding CategoryName}" FontFamily="InterMedium" LineBreakMode="TailTruncation" ToolTipProperties.Text="{Binding CategoryName}" />
                                                 <Label Text="{Binding MetaText}" Style="{StaticResource Muted}" LineBreakMode="TailTruncation" />
                                             </VerticalStackLayout>
                                             <Label Grid.Column="1" Text="{Binding AmountText}" FontFamily="InterMedium" VerticalOptions="Center" />
@@ -95,17 +98,18 @@
                     <Grid ColumnDefinitions="216,*" ColumnSpacing="32">
                         <Grid WidthRequest="216" HeightRequest="216" VerticalOptions="Center">
                             <controls:DonutChart
+                                x:Name="Donut"
                                 Segments="{Binding Segments}"
                                 ActiveSegment="{Binding ActiveSegment}"
                                 SemanticProperties.Description="Частки категорій" />
                             <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" InputTransparent="True" Padding="40,0">
                                 <Label Text="{Binding CenterValue}" FontFamily="InterSemiBold" FontSize="20" LineHeight="1.25" HorizontalTextAlignment="Center" />
-                                <Label Text="{Binding CenterLabel}" Style="{StaticResource Muted}" HorizontalTextAlignment="Center" Margin="0,4,0,0" />
+                                <Label Text="{Binding CenterLabel}" Style="{StaticResource Muted}" HorizontalTextAlignment="Center" Margin="0,4,0,0" MaxLines="2" LineBreakMode="TailTruncation" />
                             </VerticalStackLayout>
                         </Grid>
 
                         <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
-                            <Grid ColumnDefinitions="*,140,90" Padding="12,8">
+                            <Grid ColumnDefinitions="*,120,72" Padding="12,8">
                                 <Label Text="Категорія" Style="{StaticResource CardLabel}" />
                                 <Label Grid.Column="1" Text="Сума" Style="{StaticResource CardLabel}" HorizontalTextAlignment="End" />
                                 <Label Grid.Column="2" Text="Частка" Style="{StaticResource CardLabel}" HorizontalTextAlignment="End" />
@@ -116,19 +120,17 @@
                                     <DataTemplate x:DataType="vm:BreakdownRow">
                                         <VerticalStackLayout>
                                             <BoxView Style="{StaticResource Divider}" IsVisible="{Binding ShowDivider}" />
-                                            <Grid ColumnDefinitions="*,140,90" Padding="12,8">
-                                                <Grid.Triggers>
-                                                    <DataTrigger TargetType="Grid" Binding="{Binding IsActive}" Value="True">
-                                                        <Setter Property="BackgroundColor" Value="{StaticResource ColorSurfaceHover}" />
-                                                    </DataTrigger>
-                                                </Grid.Triggers>
+                                            <Grid ColumnDefinitions="*,120,72" Padding="12,8">
+                                                <Grid.Behaviors>
+                                                    <controls:TintBehavior IsActive="{Binding IsActive}" Color="{StaticResource ColorSurfaceHover}" />
+                                                </Grid.Behaviors>
                                                 <Grid.GestureRecognizers>
                                                     <PointerGestureRecognizer
                                                         PointerEnteredCommand="{Binding HoverRowCommand, Source={RelativeSource AncestorType={x:Type vm:OverviewViewModel}}, x:DataType=vm:OverviewViewModel}"
                                                         PointerEnteredCommandParameter="{Binding .}"
                                                         PointerExitedCommand="{Binding ClearHoverCommand, Source={RelativeSource AncestorType={x:Type vm:OverviewViewModel}}, x:DataType=vm:OverviewViewModel}" />
                                                 </Grid.GestureRecognizers>
-                                                <HorizontalStackLayout Spacing="8">
+                                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
                                                     <BoxView
                                                         WidthRequest="12"
                                                         HeightRequest="12"
@@ -136,11 +138,11 @@
                                                         VerticalOptions="Center"
                                                         IsVisible="{Binding HasSegment}"
                                                         Color="{Binding ColorIndex, Converter={StaticResource ChartColor}}" />
-                                                    <Label Text="{Binding Name}" FontSize="14" VerticalOptions="Center" />
-                                                    <Border Style="{StaticResource Badge}" IsVisible="{Binding IsArchived}">
+                                                    <Label Grid.Column="1" Text="{Binding Name}" FontSize="14" VerticalOptions="Center" LineBreakMode="TailTruncation" ToolTipProperties.Text="{Binding Name}" />
+                                                    <Border Grid.Column="2" Style="{StaticResource Badge}" IsVisible="{Binding IsArchived}">
                                                         <Label Text="в архіві" Style="{StaticResource BadgeText}" />
                                                     </Border>
-                                                </HorizontalStackLayout>
+                                                </Grid>
                                                 <Label Grid.Column="1" Text="{Binding AmountText}" FontSize="14" HorizontalTextAlignment="End" VerticalOptions="Center" />
                                                 <Label Grid.Column="2" Text="{Binding ShareText}" FontSize="14" HorizontalTextAlignment="End" VerticalOptions="Center" />
                                             </Grid>

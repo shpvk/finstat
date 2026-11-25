@@ -11,6 +11,7 @@ public class ExpensesViewModel : ViewModelBase
     private List<CategoryResponseDto> categories = new();
     private List<ExpenseRowViewModel> rows = new();
     private LoadState state = LoadState.Loading;
+    private int expensesVersion;
     private string errorMessage = "";
     private bool categoriesLoaded;
 
@@ -122,9 +123,20 @@ public class ExpensesViewModel : ViewModelBase
         private set => SetProperty(ref errorMessage, value);
     }
 
-    public async Task LoadAsync()
+    public Task LoadAsync()
     {
-        State = LoadState.Loading;
+        return LoadAsync(false);
+    }
+
+    public Task RefreshAsync()
+    {
+        return LoadAsync(true);
+    }
+
+    private async Task LoadAsync(bool keepContent)
+    {
+        if (!keepContent || state != LoadState.Ready)
+            State = LoadState.Loading;
         try
         {
             categories = await api.ListCategoriesAsync(true, CancellationToken.None);
@@ -141,17 +153,24 @@ public class ExpensesViewModel : ViewModelBase
             State = LoadState.Error;
             return;
         }
-        await LoadExpensesAsync();
+        await LoadExpensesAsync(keepContent);
     }
 
-    public async Task LoadExpensesAsync()
+    public Task LoadExpensesAsync()
     {
-        State = LoadState.Loading;
+        return LoadExpensesAsync(false);
+    }
+
+    private async Task LoadExpensesAsync(bool keepContent)
+    {
+        var version = ++expensesVersion;
+        if (!keepContent || state != LoadState.Ready)
+            State = LoadState.Loading;
         var requestedMonth = Month.ApiMonth;
         try
         {
             var expenses = await api.ListExpensesAsync(requestedMonth, CancellationToken.None);
-            if (requestedMonth != Month.ApiMonth)
+            if (requestedMonth != Month.ApiMonth || version != expensesVersion)
                 return;
             Rows = BuildRows(expenses);
             if (expenses.Count == 0)
@@ -161,7 +180,7 @@ public class ExpensesViewModel : ViewModelBase
         }
         catch (ApiException exception)
         {
-            if (requestedMonth != Month.ApiMonth)
+            if (requestedMonth != Month.ApiMonth || version != expensesVersion)
                 return;
             ErrorMessage = exception.Message;
             State = LoadState.Error;

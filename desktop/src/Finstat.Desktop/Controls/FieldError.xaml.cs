@@ -8,6 +8,7 @@ public partial class FieldError : ContentView
     public FieldError()
     {
         InitializeComponent();
+        Behaviors.Add(new RevealBehavior());
     }
 
     public string Text

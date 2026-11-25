@@ -22,6 +22,10 @@
 
 ![Категорії](docs/screenshots/categories.png)
 
+**Десктоп-клиент** (Windows, .NET MAUI) повторяет те же экраны: `docs/screenshots/desktop-overview.png`, `desktop-expenses.png`, `desktop-categories.png`.
+
+![Огляд в десктоп-клиенте](docs/screenshots/desktop-overview.png)
+
 ## Запуск одной командой
 
 Нужен только Docker (Docker Desktop на Windows и macOS).
@@ -46,10 +50,11 @@ docker compose up --build
 flowchart LR
   browser[Браузер] --> web["web: nginx<br/>статика React + прокси /api"]
   web --> api["api: ASP.NET Core<br/>Web API"]
+  desktop["Десктоп-клиент<br/>.NET MAUI (Windows)"] --> api
   api --> db[("db: PostgreSQL<br/>том finstat-pgdata")]
 ```
 
-Браузер ходит только на `web`: тот же origin отдаёт интерфейс и проксирует `/api/` на бэкенд, поэтому CORS не нужен.
+Браузер ходит только на `web`: тот же origin отдаёт интерфейс и проксирует `/api/` на бэкенд, поэтому CORS не нужен. Десктоп-клиент обращается к API напрямую; CORS проверяет только браузер, поэтому и для него бэкенд не меняется.
 
 ### Бэкенд: слои DDD
 
@@ -71,12 +76,22 @@ flowchart TB
 
 React + TypeScript (strict) + Vite, код разложен по разделам приложения: `features/overview`, `features/expenses`, `features/categories`. Общие компоненты — в `ui/`, собственные, без сторонней библиотеки; клиент API — в `api/`. Деньги на фронтенде остаются точными десятичными строками и форматируются `Intl.NumberFormat('uk-UA')`; итоги и доли считает бэкенд. Подробнее — `frontend/README.md`.
 
+### Десктоп-клиент
+
+.NET MAUI для Windows, нативные контролы на XAML. Модели представлений, клиент API и форматирование вынесены в `Finstat.Desktop.Core` без зависимости от MAUI и покрыты тестами. Суммы приходят строками и только форматируются; итоги и доли считает бэкенд. Подробнее — `docs/technical-decisions.md`.
+
 ## Структура backend (`backend/`)
 
 - `src/Finstat.Domain` — `Entities/`, `Results/`: сущности и инварианты, без внешних зависимостей.
 - `src/Finstat.Application` — `Services/`, `DTOs/`, `Repositories/`, `Queries/`: сценарии использования (зависит от Domain).
 - `src/Finstat.Infrastructure` — `Repositories/`, `Queries/`, `Configurations/`, EF Core (Npgsql), `FinstatDbContext`, миграции.
 - `src/Finstat.Api` — `Controllers/`, `Helpers/`: контроллеры, Problem Details, `/health`.
+
+## Структура desktop (`desktop/`)
+
+- `src/Finstat.Desktop.Core` — `DTOs/`, `Api/`, `Formatting/`, `ViewModels/`: контракт API, клиент на `HttpClient`, форматирование `uk-UA`, модели представлений.
+- `src/Finstat.Desktop` — приложение MAUI: `MainPage` с меню, `Views/` (Огляд, Витрати, Категорії), `Controls/` (кольцо, переключатель месяца, состояния), `Resources/` (цвета, стили, шрифт Inter, иконки).
+- `tests/Finstat.Desktop.Tests` — xUnit v3: форматирование, разбор суммы, клиент API, ввод расхода и обновление статистики.
 
 ## Локальная разработка
 
@@ -106,6 +121,21 @@ npm run dev
 
 Dev-сервер: http://localhost:5173, запросы `/api` он проксирует на бэкенд.
 
+Десктоп-клиент (только Windows 10 1809 и новее). Один раз установите нагрузку MAUI, нужны права администратора:
+
+```
+dotnet workload install maui-windows
+```
+
+Запуск (API должен работать на http://localhost:8080, например через `docker compose up --build`):
+
+```
+cd desktop
+dotnet run --project src/Finstat.Desktop
+```
+
+Другой адрес API задаётся переменной `FINSTAT_API_URL`, например в PowerShell: `$env:FINSTAT_API_URL = "http://localhost:8081"`.
+
 ## Проверки
 
 Бэкенд, из `backend/`:
@@ -121,6 +151,13 @@ npm run typecheck
 npm run lint
 npm test
 npm run build
+```
+
+Десктоп-клиент, из `desktop/`:
+
+```
+dotnet build
+dotnet test
 ```
 
 Сквозной браузерный тест основного сценария (добавить расход → итог и статистика обновились → данные пережили пересоздание контейнеров), против запущенного `docker compose up`:

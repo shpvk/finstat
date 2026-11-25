@@ -1,0 +1,306 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <Style TargetType="ContentPage" ApplyToDerivedTypes="True">
+        <Setter Property="BackgroundColor" Value="{StaticResource ColorSurface}" />
+    </Style>
+
+    <Style x:Key="LabelBase" TargetType="Label">
+        <Setter Property="FontFamily" Value="Inter" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeMd}" />
+        <Setter Property="TextColor" Value="{StaticResource ColorText}" />
+        <Setter Property="LineHeight" Value="1.5" />
+    </Style>
+
+    <Style TargetType="Label" BasedOn="{StaticResource LabelBase}" />
+
+    <Style x:Key="PageTitle" TargetType="Label" BasedOn="{StaticResource LabelBase}">
+        <Setter Property="LineHeight" Value="1.25" />
+        <Setter Property="FontFamily" Value="InterSemiBold" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeXl}" />
+        <Setter Property="CharacterSpacing" Value="-0.5" />
+    </Style>
+
+    <Style x:Key="PageDescription" TargetType="Label" BasedOn="{StaticResource LabelBase}">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSm}" />
+        <Setter Property="TextColor" Value="{StaticResource ColorTextMuted}" />
+        <Setter Property="Margin" Value="0,4,0,0" />
+    </Style>
+
+    <Style x:Key="SectionTitle" TargetType="Label" BasedOn="{StaticResource LabelBase}">
+        <Setter Property="LineHeight" Value="1.25" />
+        <Setter Property="FontFamily" Value="InterSemiBold" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeLg}" />
+    </Style>
+
+    <Style x:Key="CardTitle" TargetType="Label" BasedOn="{StaticResource LabelBase}">
+        <Setter Property="LineHeight" Value="1.25" />
+        <Setter Property="FontFamily" Value="InterSemiBold" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeMd}" />
+    </Style>
+
+    <Style x:Key="CardLabel" TargetType="Label" BasedOn="{StaticResource LabelBase}">
+        <Setter Property="FontFamily" Value="InterMedium" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSm}" />
+        <Setter Property="TextColor" Value="{StaticResource ColorTextMuted}" />
+    </Style>
+
+    <Style x:Key="Muted" TargetType="Label" BasedOn="{StaticResource LabelBase}">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSm}" />
+        <Setter Property="TextColor" Value="{StaticResource ColorTextMuted}" />
+    </Style>
+
+    <Style x:Key="Small" TargetType="Label" BasedOn="{StaticResource LabelBase}">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSm}" />
+    </Style>
+
+    <Style x:Key="FieldLabel" TargetType="Label" BasedOn="{StaticResource LabelBase}">
+        <Setter Property="FontFamily" Value="InterMedium" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSm}" />
+        <Setter Property="Margin" Value="0,0,0,8" />
+    </Style>
+
+    <Style x:Key="ErrorText" TargetType="Label" BasedOn="{StaticResource LabelBase}">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSm}" />
+        <Setter Property="TextColor" Value="{StaticResource ColorDangerText}" />
+        <Setter Property="Margin" Value="0,8,0,0" />
+    </Style>
+
+    <Style x:Key="Total" TargetType="Label" BasedOn="{StaticResource LabelBase}">
+        <Setter Property="LineHeight" Value="1.25" />
+        <Setter Property="FontFamily" Value="InterSemiBold" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeDisplay}" />
+        <Setter Property="CharacterSpacing" Value="-0.7" />
+        <Setter Property="Margin" Value="0,8,0,0" />
+    </Style>
+
+    <Style x:Key="Amount" TargetType="Label" BasedOn="{StaticResource LabelBase}">
+        <Setter Property="FontFamily" Value="InterMedium" />
+        <Setter Property="HorizontalTextAlignment" Value="End" />
+    </Style>
+
+    <Style x:Key="BadgeText" TargetType="Label" BasedOn="{StaticResource LabelBase}">
+        <Setter Property="FontFamily" Value="InterMedium" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSm}" />
+        <Setter Property="TextColor" Value="{StaticResource ColorTextMuted}" />
+    </Style>
+
+    <Style x:Key="Badge" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource ColorSurfaceSubtle}" />
+        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 6" />
+        <Setter Property="Padding" Value="8,2" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <Style x:Key="Panel" TargetType="Border">
+        <Setter Property="Stroke" Value="{StaticResource ColorBorder}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 10" />
+        <Setter Property="BackgroundColor" Value="{StaticResource ColorSurface}" />
+        <Setter Property="Padding" Value="24" />
+    </Style>
+
+    <Style x:Key="ListPanel" TargetType="Border" BasedOn="{StaticResource Panel}">
+        <Setter Property="Padding" Value="0" />
+    </Style>
+
+    <Style x:Key="InputAdornment" TargetType="Image">
+        <Setter Property="WidthRequest" Value="16" />
+        <Setter Property="HeightRequest" Value="16" />
+        <Setter Property="HorizontalOptions" Value="End" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="Margin" Value="0,0,12,0" />
+        <Setter Property="InputTransparent" Value="True" />
+    </Style>
+
+    <Style x:Key="Divider" TargetType="BoxView">
+        <Setter Property="HeightRequest" Value="1" />
+        <Setter Property="Color" Value="{StaticResource ColorBorder}" />
+    </Style>
+
+    <Style x:Key="ButtonBase" TargetType="Button">
+        <Setter Property="FontFamily" Value="InterMedium" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSm}" />
+        <Setter Property="HeightRequest" Value="{StaticResource ControlHeight}" />
+        <Setter Property="MinimumHeightRequest" Value="{StaticResource ControlHeight}" />
+        <Setter Property="Padding" Value="16,0" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="VerticalOptions" Value="Start" />
+    </Style>
+
+    <Style x:Key="LinkButton" TargetType="Button">
+        <Setter Property="FontFamily" Value="InterMedium" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSm}" />
+        <Setter Property="TextColor" Value="{StaticResource ColorAccentText}" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="BorderWidth" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="MinimumHeightRequest" Value="0" />
+        <Setter Property="MinimumWidthRequest" Value="0" />
+        <Setter Property="HorizontalOptions" Value="Start" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <Style x:Key="NavButton" TargetType="Button">
+        <Setter Property="Text" Value="" />
+        <Setter Property="HeightRequest" Value="36" />
+        <Setter Property="MinimumHeightRequest" Value="36" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="BorderWidth" Value="0" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+    </Style>
+
+    <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource ButtonBase}">
+        <Setter Property="BackgroundColor" Value="{StaticResource ColorAccent}" />
+        <Setter Property="BorderColor" Value="{StaticResource ColorAccent}" />
+        <Setter Property="TextColor" Value="{StaticResource ColorOnAccent}" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="PointerOver">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource ColorAccentHover}" />
+                            <Setter Property="BorderColor" Value="{StaticResource ColorAccentHover}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource ColorAccentActive}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource ColorSurfaceHover}" />
+                            <Setter Property="BorderColor" Value="{StaticResource ColorBorder}" />
+                            <Setter Property="TextColor" Value="{StaticResource ColorTextDisabled}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource ButtonBase}">
+        <Setter Property="BackgroundColor" Value="{StaticResource ColorSurface}" />
+        <Setter Property="BorderColor" Value="{StaticResource ColorBorderStrong}" />
+        <Setter Property="TextColor" Value="{StaticResource ColorText}" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="PointerOver">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource ColorSurfaceHover}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource ColorSurfaceActive}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource ColorSurfaceHover}" />
+                            <Setter Property="BorderColor" Value="{StaticResource ColorBorder}" />
+                            <Setter Property="TextColor" Value="{StaticResource ColorTextDisabled}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource ButtonBase}">
+        <Setter Property="BackgroundColor" Value="{StaticResource ColorDanger}" />
+        <Setter Property="BorderColor" Value="{StaticResource ColorDanger}" />
+        <Setter Property="TextColor" Value="{StaticResource ColorOnAccent}" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="PointerOver">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource ColorDangerHover}" />
+                            <Setter Property="BorderColor" Value="{StaticResource ColorDangerHover}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource ColorDangerActive}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource ColorSurfaceHover}" />
+                            <Setter Property="TextColor" Value="{StaticResource ColorTextDisabled}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="GhostButton" TargetType="Button" BasedOn="{StaticResource ButtonBase}">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="BorderColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{StaticResource ColorTextMuted}" />
+        <Setter Property="ContentLayout" Value="Left,8" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="PointerOver">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource ColorSurfaceHover}" />
+                            <Setter Property="BorderColor" Value="{StaticResource ColorSurfaceHover}" />
+                            <Setter Property="TextColor" Value="{StaticResource ColorText}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource ColorSurfaceActive}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{StaticResource ColorTextDisabled}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style TargetType="Entry">
+        <Setter Property="FontFamily" Value="Inter" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeMd}" />
+        <Setter Property="TextColor" Value="{StaticResource ColorText}" />
+        <Setter Property="PlaceholderColor" Value="{StaticResource ColorTextMuted}" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <Style TargetType="Picker">
+        <Setter Property="FontFamily" Value="Inter" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeMd}" />
+        <Setter Property="TextColor" Value="{StaticResource ColorText}" />
+        <Setter Property="TitleColor" Value="{StaticResource ColorText}" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <Style TargetType="DatePicker">
+        <Setter Property="FontFamily" Value="Inter" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeMd}" />
+        <Setter Property="TextColor" Value="{StaticResource ColorText}" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+</ResourceDictionary>

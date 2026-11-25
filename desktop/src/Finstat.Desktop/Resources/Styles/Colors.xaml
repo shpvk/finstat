@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <Color x:Key="ColorSurface">#ffffff</Color>
+    <Color x:Key="ColorSurfaceSubtle">#f4f7fa</Color>
+    <Color x:Key="ColorSurfaceHover">#ebeff4</Color>
+    <Color x:Key="ColorSurfaceActive">#e2e7ed</Color>
+    <Color x:Key="ColorBorder">#dfe3e8</Color>
+    <Color x:Key="ColorBorderStrong">#818a95</Color>
+    <Color x:Key="ColorText">#151b24</Color>
+    <Color x:Key="ColorTextMuted">#545b66</Color>
+    <Color x:Key="ColorTextDisabled">#81878f</Color>
+    <Color x:Key="ColorAccent">#1f5ed9</Color>
+    <Color x:Key="ColorAccentHover">#134ac5</Color>
+    <Color x:Key="ColorAccentActive">#103baf</Color>
+    <Color x:Key="ColorAccentSubtle">#e7f1ff</Color>
+    <Color x:Key="ColorAccentText">#1245b9</Color>
+    <Color x:Key="ColorOnAccent">#ffffff</Color>
+    <Color x:Key="ColorDanger">#c51e21</Color>
+    <Color x:Key="ColorDangerHover">#ac0311</Color>
+    <Color x:Key="ColorDangerActive">#94020d</Color>
+    <Color x:Key="ColorDangerText">#b00c15</Color>
+    <Color x:Key="ColorDangerBorder">#d33b36</Color>
+
+    <Color x:Key="Chart1">#2a78d6</Color>
+    <Color x:Key="Chart2">#eb6834</Color>
+    <Color x:Key="Chart3">#1baf7a</Color>
+    <Color x:Key="Chart4">#eda100</Color>
+    <Color x:Key="Chart5">#e87ba4</Color>
+    <Color x:Key="Chart6">#008300</Color>
+
+    <x:Double x:Key="FontSizeSm">14</x:Double>
+    <x:Double x:Key="FontSizeMd">16</x:Double>
+    <x:Double x:Key="FontSizeLg">20</x:Double>
+    <x:Double x:Key="FontSizeXl">24</x:Double>
+    <x:Double x:Key="FontSizeDisplay">36</x:Double>
+
+    <x:Double x:Key="Space1">4</x:Double>
+    <x:Double x:Key="Space2">8</x:Double>
+    <x:Double x:Key="Space3">12</x:Double>
+    <x:Double x:Key="Space4">16</x:Double>
+    <x:Double x:Key="Space6">24</x:Double>
+    <x:Double x:Key="Space8">32</x:Double>
+    <x:Double x:Key="Space10">40</x:Double>
+    <x:Double x:Key="Space12">48</x:Double>
+
+    <x:Double x:Key="ControlHeight">40</x:Double>
+    <x:Double x:Key="SidebarWidth">248</x:Double>
+    <x:Double x:Key="ContentWidth">960</x:Double>
+
+</ResourceDictionary>

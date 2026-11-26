@@ -1,115 +1,115 @@
 # finstat
 
-Трекер личных расходов (MVP, учебный проект). Расходы записываются вручную по категориям, а приложение показывает, сколько потрачено за месяц и на что, графиком и таблицей. UI на украинском, код и коммиты на английском. Решения: `docs/`.
+Трекер особистих витрат (MVP, навчальний проєкт). Витрати записуються вручну за категоріями, а застосунок показує графіком і таблицею, скільки витрачено за місяць і на що. Інтерфейс українською, код і коміти англійською. Рішення: `docs/`.
 
-## Что умеет
+## Що вміє
 
-- Добавлять, изменять и удалять расходы: сумма в гривнах, категория, дата (по умолчанию сегодня), необязательный комментарий.
-- Вести свои категории: добавлять, переименовывать, отправлять в архив. Архивная категория остаётся в истории и статистике, но новые расходы в неё не записываются.
-- Показывать любой месяц: итог, самую затратную категорию, три последние операции, кольцо долей и таблицу сумм по категориям.
+- Додавати, змінювати й видаляти витрати: сума в гривнях, категорія, дата (за замовчуванням сьогодні), необов'язковий коментар.
+- Вести власні категорії: додавати, перейменовувати, відправляти в архів. Архівна категорія лишається в історії та статистиці, але нові витрати в неї не записуються.
+- Показувати будь-який місяць: підсумок, найвитратнішу категорію, три останні операції, кільце часток і таблицю сум за категоріями.
 
-## Скриншоты
+## Скриншоти
 
-**Огляд** — итог месяца, последние операции, доли категорий:
+**Огляд**: підсумок місяця, останні операції, частки категорій:
 
 ![Огляд](docs/screenshots/overview.png)
 
-**Витрати** — форма и список за выбранный месяц:
+**Витрати**: форма і список за обраний місяць:
 
 ![Витрати](docs/screenshots/expenses.png)
 
-**Категорії** — активные и архив:
+**Категорії**: активні та архів:
 
 ![Категорії](docs/screenshots/categories.png)
 
-**Десктоп-клиент** (Windows, .NET MAUI) повторяет те же экраны: `docs/screenshots/desktop-overview.png`, `desktop-expenses.png`, `desktop-categories.png`.
+**Десктоп-клієнт** (Windows, .NET MAUI) повторює ті самі екрани: `docs/screenshots/desktop-overview.png`, `desktop-expenses.png`, `desktop-categories.png`.
 
-![Огляд в десктоп-клиенте](docs/screenshots/desktop-overview.png)
+![Огляд у десктоп-клієнті](docs/screenshots/desktop-overview.png)
 
-## Запуск одной командой
+## Запуск однією командою
 
-Нужен только Docker (Docker Desktop на Windows и macOS).
+Потрібен лише Docker (Docker Desktop на Windows і macOS).
 
-Один раз скопируйте `.env.example` в `.env` и задайте в нём `POSTGRES_PASSWORD` (в cmd: `copy .env.example .env`, в PowerShell и bash: `cp .env.example .env`). Дальше всё приложение запускается одной командой:
+Один раз скопіюйте `.env.example` у `.env` і задайте в ньому `POSTGRES_PASSWORD` (у cmd: `copy .env.example .env`, у PowerShell і bash: `cp .env.example .env`). Далі весь застосунок запускається однією командою:
 
 ```
 docker compose up --build
 ```
 
-Пароль не должен содержать `;` и `'`: он подставляется в строку подключения. Первая сборка образов занимает несколько минут.
+Пароль не повинен містити `;` і `'`: він підставляється в рядок підключення. Перше збирання образів триває кілька хвилин.
 
-Приложение: http://localhost:3000. API: http://localhost:8080 (`/health`). PostgreSQL хранится в именованном томе `finstat-pgdata` (Docker добавляет к имени префикс проекта, например `proektnet_finstat-pgdata`), поэтому данные переживают перезапуск и пересоздание контейнеров.
-Остановка: `docker compose down`. Флаг `-v` удаляет данные — только осознанно.
-Порты хоста меняются через `WEB_PORT`, `API_PORT` и `DB_PORT` в `.env` (если порт 5432 занят локальным PostgreSQL, укажите, например, `DB_PORT=5433`).
+Застосунок: http://localhost:3000. API: http://localhost:8080 (`/health`). PostgreSQL зберігається в іменованому томі `finstat-pgdata` (Docker додає до назви префікс проєкту за назвою теки, наприклад `finstat_finstat-pgdata`), тому дані переживають перезапуск і перестворення контейнерів.
+Зупинка: `docker compose down`. Прапорець `-v` видаляє дані, тож лише свідомо.
+Порти хоста змінюються через `WEB_PORT`, `API_PORT` і `DB_PORT` у `.env` (якщо порт 5432 зайнятий локальним PostgreSQL, вкажіть, наприклад, `DB_PORT=5433`).
 
-При первом запуске уже есть категории «Їжа» и «Комунальні послуги».
+Під час першого запуску вже є категорії «Їжа» і «Комунальні послуги».
 
-## Архитектура
+## Архітектура
 
 ```mermaid
 flowchart LR
-  browser[Браузер] --> web["web: nginx<br/>статика React + прокси /api"]
+  browser[Браузер] --> web["web: nginx<br/>статика React + проксі /api"]
   web --> api["api: ASP.NET Core<br/>Web API"]
-  desktop["Десктоп-клиент<br/>.NET MAUI (Windows)"] --> api
+  desktop["Десктоп-клієнт<br/>.NET MAUI (Windows)"] --> api
   api --> db[("db: PostgreSQL<br/>том finstat-pgdata")]
 ```
 
-Браузер ходит только на `web`: тот же origin отдаёт интерфейс и проксирует `/api/` на бэкенд, поэтому CORS не нужен. Десктоп-клиент обращается к API напрямую; CORS проверяет только браузер, поэтому и для него бэкенд не меняется.
+Браузер звертається лише до `web`: той самий origin віддає інтерфейс і проксує `/api/` на бекенд, тому CORS не потрібен. Десктоп-клієнт звертається до API напряму; CORS перевіряє лише браузер, тому й для нього бекенд не змінюється.
 
-### Бэкенд: слои DDD
+### Бекенд: шари DDD
 
 ```mermaid
 flowchart TB
   Api[Finstat.Api] --> Application[Finstat.Application]
-  Api -. подключает .-> Infrastructure[Finstat.Infrastructure]
+  Api -. підключає .-> Infrastructure[Finstat.Infrastructure]
   Infrastructure --> Application
   Application --> Domain[Finstat.Domain]
   Infrastructure --> Domain
 ```
 
-- **Domain** — модель и правила без внешних зависимостей. Агрегаты `CategoryEntity` и `ExpenseEntity`; расход ссылается на категорию по идентификатору. Сумма — `decimal`, проверка в `ExpenseEntity`: только положительная, не больше двух знаков после запятой, лишняя точность отвергается, а не округляется. Состояние меняется только методами (`Rename`, `Archive`, `Change`), публичных setters нет.
-- **Application** — сценарии: `CategoryService`, `ExpenseService`, `StatisticsService`. Здесь проверяется, например, уникальность названия категории и то, что новый расход не попадает в архивную категорию. Интерфейсы хранения (`ICategoryRepository`, `IExpenseRepository`, `IStatisticsQuery`) объявлены здесь же.
-- **Infrastructure** — EF Core (Npgsql), конфигурация маппинга, миграции и реализации интерфейсов. Статистика месяца считается агрегацией в SQL, без загрузки всех расходов.
-- **Api** — контроллеры под `/api`, явные DTO, ошибки в формате Problem Details. Контроллеры вызывают сценарии и не содержат бизнес-правил.
+- **Domain**: модель і правила без зовнішніх залежностей. Агрегати `CategoryEntity` і `ExpenseEntity`; витрата посилається на категорію за ідентифікатором. Сума має тип `decimal`, перевірка в `ExpenseEntity`: лише додатна, не більше двох знаків після коми, зайва точність відкидається з помилкою, а не округлюється. Стан змінюється лише методами (`Rename`, `Archive`, `Change`), публічних setters немає.
+- **Application**: сценарії `CategoryService`, `ExpenseService`, `StatisticsService`. Тут перевіряється, наприклад, унікальність назви категорії і те, що нова витрата не потрапляє в архівну категорію. Інтерфейси зберігання (`ICategoryRepository`, `IExpenseRepository`) оголошені тут же.
+- **Infrastructure**: EF Core (Npgsql), конфігурація маппінгу, міграції та реалізації інтерфейсів. Статистика місяця рахується агрегацією в SQL, без завантаження всіх витрат.
+- **Api**: контролери під `/api` (`categories`, `expenses`, `statistics`), явні DTO, помилки у форматі Problem Details. Контролери викликають сценарії й не містять бізнес-правил.
 
 ### Фронтенд
 
-React + TypeScript (strict) + Vite, код разложен по разделам приложения: `features/overview`, `features/expenses`, `features/categories`. Общие компоненты — в `ui/`, собственные, без сторонней библиотеки; клиент API — в `api/`. Деньги на фронтенде остаются точными десятичными строками и форматируются `Intl.NumberFormat('uk-UA')`; итоги и доли считает бэкенд. Подробнее — `frontend/README.md`.
+React + TypeScript (strict) + Vite. Код розкладено за розділами застосунку: `features/overview`, `features/expenses`, `features/categories`. Оболонка застосунку лежить у `app/`, спільні утиліти (дати, гроші, вибраний місяць) у `shared/`, власні компоненти без сторонньої бібліотеки в `ui/`, клієнт API в `api/`. Гроші на фронтенді лишаються точними десятковими рядками й форматуються `Intl.NumberFormat('uk-UA')`; підсумки й частки рахує бекенд. Докладніше: `frontend/README.md`.
 
-### Десктоп-клиент
+### Десктоп-клієнт
 
-.NET MAUI для Windows, нативные контролы на XAML. Модели представлений, клиент API и форматирование вынесены в `Finstat.Desktop.Core` без зависимости от MAUI и покрыты тестами. Суммы приходят строками и только форматируются; итоги и доли считает бэкенд. Подробнее — `docs/technical-decisions.md`.
+.NET MAUI для Windows, нативні контроли на XAML. Моделі представлень, клієнт API і форматування винесені в `Finstat.Desktop.Core` без залежності від MAUI й покриті тестами. Суми приходять рядками й лише форматуються; підсумки й частки рахує бекенд. Докладніше: `docs/technical-decisions.md`.
 
 ## Структура backend (`backend/`)
 
-- `src/Finstat.Domain` — `Entities/`, `Results/`: сущности и инварианты, без внешних зависимостей.
-- `src/Finstat.Application` — `Services/`, `DTOs/`, `Repositories/`, `Queries/`: сценарии использования (зависит от Domain).
-- `src/Finstat.Infrastructure` — `Repositories/`, `Queries/`, `Configurations/`, EF Core (Npgsql), `FinstatDbContext`, миграции.
-- `src/Finstat.Api` — `Controllers/`, `Helpers/`: контроллеры, Problem Details, `/health`.
+- `src/Finstat.Domain`: `Entities/`, `Results/`, сутності й інваріанти без зовнішніх залежностей.
+- `src/Finstat.Application`: `Services/`, `DTOs/`, `Repositories/`, сценарії використання (залежить від Domain).
+- `src/Finstat.Infrastructure`: `Repositories/`, `Configurations/`, EF Core (Npgsql), `FinstatDbContext`, міграції.
+- `src/Finstat.Api`: `Controllers/`, `Helpers/`, контролери, Problem Details, `/health`.
 
 ## Структура desktop (`desktop/`)
 
-- `src/Finstat.Desktop.Core` — `DTOs/`, `Api/`, `Formatting/`, `ViewModels/`: контракт API, клиент на `HttpClient`, форматирование `uk-UA`, модели представлений.
-- `src/Finstat.Desktop` — приложение MAUI: `MainPage` с меню, `Views/` (Огляд, Витрати, Категорії), `Controls/` (кольцо, переключатель месяца, состояния), `Resources/` (цвета, стили, шрифт Inter, иконки).
-- `tests/Finstat.Desktop.Tests` — xUnit v3: форматирование, разбор суммы, клиент API, ввод расхода и обновление статистики.
+- `src/Finstat.Desktop.Core`: `DTOs/`, `Api/`, `Formatting/`, `ViewModels/`, контракт API, клієнт на `HttpClient`, форматування `uk-UA`, моделі представлень.
+- `src/Finstat.Desktop`: застосунок MAUI, `MainPage` з меню, `Views/` (Огляд, Витрати, Категорії), `Controls/` (кільце, перемикач місяця, стани), `Resources/` (кольори, стилі, шрифт Inter, іконки).
+- `tests/Finstat.Desktop.Tests`: xUnit v3, форматування, розбір суми, клієнт API, введення витрати й оновлення статистики.
 
-## Локальная разработка
+## Локальна розробка
 
-Нужны .NET SDK 10 (версия зафиксирована в `backend/global.json`), Node.js 22.13+ или 24 и Docker для базы и тестов.
+Потрібні .NET SDK 10 (версія зафіксована в `backend/global.json` і `desktop/global.json`), Node.js 22.13+ або 24 і Docker для бази.
 
-БД из Compose, API локально:
+БД з Compose, API локально:
 
 ```
 docker compose up -d db
 cd backend/src/Finstat.Api
-dotnet user-secrets set "ConnectionStrings:Finstat" "Host=localhost;Port=5432;Database=finstat;Username=finstat;Password=<пароль из .env>"
+dotnet user-secrets set "ConnectionStrings:Finstat" "Host=localhost;Port=5432;Database=finstat;Username=finstat;Password=<пароль з .env>"
 dotnet run
 ```
 
-(порт в строке подключения — `DB_PORT` из `.env`.) Профиль `http` слушает http://localhost:8080 в режиме Development:
-OpenAPI — `/openapi/v1.json`, Scalar UI — `/scalar`. В Docker-образе эти адреса отключены.
+(порт у рядку підключення береться з `DB_PORT` у `.env`.) Профіль `http` слухає http://localhost:8080 у режимі Development:
+OpenAPI на `/openapi/v1.json`, Swagger UI на `/swagger`. У Docker-образі ці адреси вимкнені.
 
-Строка подключения обязательна: `ConnectionStrings:Finstat` (env `ConnectionStrings__Finstat`), иначе API не стартует.
+Рядок підключення обов'язковий: `ConnectionStrings:Finstat` (env `ConnectionStrings__Finstat`), інакше API не стартує.
 
 Фронтенд локально (API на http://localhost:8080):
 
@@ -119,32 +119,32 @@ npm ci
 npm run dev
 ```
 
-Dev-сервер: http://localhost:5173, запросы `/api` он проксирует на бэкенд.
+Dev-сервер: http://localhost:5173, запити `/api` він проксує на бекенд.
 
-Десктоп-клиент (только Windows 10 1809 и новее). Один раз установите нагрузку MAUI, нужны права администратора:
+Десктоп-клієнт (лише Windows 10 1809 і новіші). Один раз встановіть навантаження MAUI, потрібні права адміністратора:
 
 ```
 dotnet workload install maui-windows
 ```
 
-Запуск (API должен работать на http://localhost:8080, например через `docker compose up --build`):
+Запуск (API має працювати на http://localhost:8080, наприклад через `docker compose up --build`):
 
 ```
 cd desktop
 dotnet run --project src/Finstat.Desktop
 ```
 
-Другой адрес API задаётся переменной `FINSTAT_API_URL`, например в PowerShell: `$env:FINSTAT_API_URL = "http://localhost:8081"`.
+Іншу адресу API задає змінна `FINSTAT_API_URL`, наприклад у PowerShell: `$env:FINSTAT_API_URL = "http://localhost:8081"`.
 
-## Проверки
+## Перевірки
 
-Бэкенд, из `backend/`:
+Бекенд, з `backend/`:
 
 ```
 dotnet build
 ```
 
-Фронтенд, из `frontend/`:
+Фронтенд, з `frontend/`:
 
 ```
 npm run typecheck
@@ -153,14 +153,14 @@ npm test
 npm run build
 ```
 
-Десктоп-клиент, из `desktop/`:
+Десктоп-клієнт, з `desktop/`:
 
 ```
 dotnet build
 dotnet test
 ```
 
-Сквозной браузерный тест основного сценария (добавить расход → итог и статистика обновились → данные пережили пересоздание контейнеров), против запущенного `docker compose up`:
+Наскрізний браузерний тест основного сценарію (додати витрату → підсумок і статистика оновилися → дані пережили перестворення контейнерів) проти запущеного `docker compose up`:
 
 ```
 cd frontend
@@ -168,15 +168,15 @@ npm ci
 npm run test:e2e
 ```
 
-Нужен установленный Google Chrome; без него — `npx playwright install chromium` и переменная `E2E_BROWSER_CHANNEL=chromium`. Тест добавляет один расход и удаляет его в конце. Подробнее — `frontend/README.md`.
+Потрібен встановлений Google Chrome; без нього виконайте `npx playwright install chromium` і задайте змінну `E2E_BROWSER_CHANNEL=chromium`. Тест додає одну витрату й видаляє її наприкінці. Докладніше: `frontend/README.md`.
 
-## Миграции
+## Міграції
 
-Применяются автоматически при старте API (`Database.MigrateAsync`). Новая миграция (из `backend/`):
+Застосовуються автоматично під час старту API (`Database.MigrateAsync`). Нова міграція (з `backend/`):
 
 ```
 dotnet tool restore
 dotnet ef migrations add <Name> -p src/Finstat.Infrastructure -s src/Finstat.Infrastructure -o Migrations
 ```
 
-Удалить последнюю ещё не применённую миграцию: та же команда с `migrations remove --force` (инструмент не подключается к БД, поэтому без `--force` не может проверить, применена ли она).
+Видалити останню ще не застосовану міграцію: та сама команда з `migrations remove --force` (інструмент не підключається до БД, тому без `--force` не може перевірити, чи її вже застосовано).

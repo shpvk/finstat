@@ -1,10 +1,10 @@
 using System.Globalization;
 using Finstat.Application.DTOs;
-using Finstat.Application.Queries;
+using Finstat.Application.Repositories;
 
 namespace Finstat.Application.Services;
 
-public class StatisticsService(IStatisticsQuery query)
+public class StatisticsService(IExpenseRepository expenses)
 {
     public const int RecentCount = 3;
 
@@ -12,8 +12,8 @@ public class StatisticsService(IStatisticsQuery query)
     {
         var from = new DateOnly(month.Year, month.Month, 1);
         var to = from.AddMonths(1);
-        var totals = await query.CategoryTotalsAsync(from, to, ct);
-        var recent = await query.RecentAsync(from, to, RecentCount, ct);
+        var totals = await expenses.CategoryTotalsAsync(from, to, ct);
+        var recent = await expenses.RecentAsync(from, to, RecentCount, ct);
 
         var total = 0m;
         foreach (var categoryTotal in totals)

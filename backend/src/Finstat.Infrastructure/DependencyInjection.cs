@@ -1,6 +1,4 @@
-using Finstat.Application.Queries;
 using Finstat.Application.Repositories;
-using Finstat.Infrastructure.Queries;
 using Finstat.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -20,7 +18,6 @@ public static class DependencyInjection
         services.AddDbContext<FinstatDbContext>(o => o.UseNpgsql(connectionString));
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IExpenseRepository, ExpenseRepository>();
-        services.AddScoped<IStatisticsQuery, StatisticsQuery>();
         return services;
     }
 }

@@ -1,7 +1,6 @@
 using Finstat.Application.Services;
 using Finstat.Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +21,7 @@ app.UseStatusCodePages();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference();
+    app.UseSwaggerUI(o => o.SwaggerEndpoint("/openapi/v1.json", "Finstat API"));
 }
 
 app.MapHealthChecks("/health");

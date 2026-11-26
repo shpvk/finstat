@@ -1,50 +1,50 @@
-# Finstat: фронтенд
+# Finstat: frontend
 
-React, TypeScript (strict) и Vite. Нужен Node.js 22 (от 22.13) или 24.
+React, TypeScript (strict) and Vite. Requires Node.js 22 (22.13 or later) or 24.
 
-## Команды
+## Commands
 
-Выполняются в папке `frontend/`.
+Run them in the `frontend/` folder.
 
-| Команда | Что делает |
+| Command | What it does |
 | --- | --- |
-| `npm ci` | Ставит зависимости строго по `package-lock.json` |
-| `npm run dev` | Dev-сервер на http://localhost:5173 |
-| `npm run typecheck` | Проверка типов |
-| `npm run lint` | Линтер (oxlint) |
-| `npm test` | Тесты (Vitest + React Testing Library) |
-| `npm run build` | Проверка типов и сборка в `dist/` |
-| `npm run test:e2e` | Сквозной браузерный тест (Playwright) против запущенного `docker compose up` |
+| `npm ci` | Installs dependencies exactly as in `package-lock.json` |
+| `npm run dev` | Dev server on http://localhost:5173 |
+| `npm run typecheck` | Type check |
+| `npm run lint` | Linter (oxlint) |
+| `npm test` | Tests (Vitest + React Testing Library) |
+| `npm run build` | Type check and build into `dist/` |
+| `npm run test:e2e` | End-to-end browser test (Playwright) against a running `docker compose up` |
 
-### Сквозной тест
+### End-to-end test
 
-`e2e/expense-flow.spec.ts` добавляет расход через интерфейс, проверяет, что итог месяца и таблица категорий на «Огляді» обновились, пересоздаёт контейнеры `db` и `api` (`docker compose up -d --force-recreate db api`, том с данными не трогается) и убеждается, что расход сохранился. В конце расход удаляется, так что данные в базе не меняются; дата и месяц берутся из формы, поэтому тест не зависит от часового пояса машины. Нужны запущенный стек Compose и хотя бы одна активная категория.
+`e2e/expense-flow.spec.ts` adds an expense through the UI, checks that the monthly total and the category table on «Огляд» (Overview) updated, recreates the `db` and `api` containers (`docker compose up -d --force-recreate db api`; the data volume is left alone) and confirms the expense is still there. At the end the expense is deleted, so the database is left unchanged; the date and month are read from the form, so the test doesn't depend on the machine's time zone. It needs a running Compose stack and at least one active category.
 
-- Адрес приложения — `E2E_BASE_URL`, по умолчанию http://localhost:3000.
-- Браузер — установленный Google Chrome (`E2E_BROWSER_CHANNEL`, по умолчанию `chrome`). Без Chrome: `npx playwright install chromium` и `E2E_BROWSER_CHANNEL=chromium`.
+- App address: `E2E_BASE_URL`, default http://localhost:3000.
+- Browser: an installed Google Chrome (`E2E_BROWSER_CHANNEL`, default `chrome`). Without Chrome: `npx playwright install chromium` and `E2E_BROWSER_CHANNEL=chromium`.
 
-## Структура
+## Layout
 
-- `src/App.tsx` — маршруты.
-- `src/app` — оболочка приложения с меню и страница «не найдено».
-- `src/features` — экраны по разделам: `overview`, `expenses`, `categories`.
-- `src/ui` — базовые компоненты: кнопка, поле, выбор, состояния загрузки, пустого списка и ошибки, заголовок страницы.
-- `src/styles` — токены визуальной системы и базовые стили.
-- `src/api` — клиент API.
+- `src/App.tsx`: routes.
+- `src/app`: the app shell with the menu and the "not found" page.
+- `src/features`: screens by section: `overview`, `expenses`, `categories`.
+- `src/ui`: base components: button, field, select, loading, empty and error states, page header.
+- `src/styles`: visual system tokens and base styles.
+- `src/api`: the API client.
 
-Решения по визуальной системе записаны в `docs/technical-decisions.md`. Все базовые компоненты во всех состояниях можно посмотреть на справочной странице http://localhost:5173/ui; она работает только под `npm run dev`.
+Visual system decisions are recorded in `docs/technical-decisions.md`. Every base component in every state can be viewed on the reference page http://localhost:5173/ui; it is available only under `npm run dev`.
 
-## Связь с API
+## Talking to the API
 
-Клиент — `src/api/client.ts`. Все запросы идут через `apiRequest`; любая неудача приходит как `ApiError` со статусом и разобранным Problem Details. Пользователю показывается `detail` из Problem Details, поэтому бэкенд пишет его по-украински. Отменённый через `signal` запрос не превращается в `ApiError`: исходная ошибка отмены пробрасывается как есть.
+The client is `src/api/client.ts`. All requests go through `apiRequest`; any failure arrives as an `ApiError` with the status and the parsed Problem Details. The user sees `detail` from the Problem Details, so the backend writes it in Ukrainian. A request cancelled through `signal` doesn't become an `ApiError`: the original abort error is rethrown as is.
 
-- Статус `0` в `ApiError` означает, что ответ не удалось получить целиком: сервер недоступен или соединение оборвалось.
-- `title` из Problem Details пользователю не показывается: для ошибок самого ASP.NET Core это общий английский заголовок. Он остаётся доступен в `ApiError.problem`.
-- Пустое тело успешного ответа (например, `204`) возвращается как `undefined`.
+- Status `0` in `ApiError` means the full response couldn't be received: the server is unreachable or the connection dropped.
+- `title` from the Problem Details isn't shown to the user: for errors raised by ASP.NET Core itself it's a generic English title. It stays available in `ApiError.problem`.
+- An empty body of a successful response (e.g. `204`) is returned as `undefined`.
 
-## Настройки
+## Settings
 
-- `VITE_API_BASE_URL` — базовый адрес API для браузера, без завершающего слэша. По умолчанию `/api`, то есть тот же origin: в разработке это прокси Vite, в Docker — веб-сервер.
-- `API_PROXY_TARGET` — адрес запущенного бэкенда, на который dev-сервер проксирует `/api`. По умолчанию `http://localhost:8080`.
+- `VITE_API_BASE_URL`: the API base address for the browser, without a trailing slash. Defaults to `/api`, i.e. the same origin: the Vite proxy in development, the web server in Docker.
+- `API_PROXY_TARGET`: the address of the running backend that the dev server proxies `/api` to. Defaults to `http://localhost:8080`.
 
-В `.env.example` записаны значения по умолчанию. Чтобы их изменить, скопируйте файл в `frontend/.env`.
+`.env.example` holds the defaults. To change them, copy the file to `frontend/.env`.
